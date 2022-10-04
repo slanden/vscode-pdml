@@ -1,0 +1,100 @@
+{
+  "comments": {
+    "blockComment": [
+      "[-",
+      "-]"
+    ]
+  },
+  "brackets": [
+    [
+      "[",
+      "]"
+    ],
+    [
+      "(",
+      ")"
+    ]
+  ],
+  // Symbols that are auto-closed when typing
+  "autoClosingPairs": [
+    [
+      "{",
+      "}"
+    ],
+    [
+      "[",
+      "]"
+    ],
+    [
+      "(",
+      ")"
+    ],
+    [
+      "[-",
+      "-]"
+    ],
+    {
+      "begin": "\"",
+      "end": "\"",
+      "notIn": [
+        "string"
+      ]
+    },
+    {
+      "begin": "'",
+      "end": "'",
+      "notIn": [
+        "string"
+      ]
+    }
+  ],
+  // Symbols that can be used to surround a selection
+  "surroundingPairs": [
+    [
+      "{",
+      "}"
+    ],
+    [
+      "[",
+      "]"
+    ],
+    [
+      "(",
+      ")"
+    ],
+    [
+      "\"",
+      "\""
+    ],
+    [
+      "'",
+      "'"
+    ]
+  ],
+  // An empty array disables it
+  // "colorizedBracketPairs": [],
+  "onEnterRules": [
+    {
+      "beforeText": "\\]",
+      "action": {
+        "indent": "none"
+      }
+    },
+    // Immediately before an attributes section,
+    // only create 1 newline as not to imply that
+    // attributes can be placed anywhere
+    {
+      "beforeText": "\\[.*",
+      "afterText": "\\(.*\\)",
+      "action": {
+        "indent": "indent"
+      }
+    },
+    {
+      "beforeText": "\\[.*",
+      "action": {
+        "indent": "indentOutdent"
+      }
+    },
+  ]
+}

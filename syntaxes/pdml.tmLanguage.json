@@ -1,0 +1,161 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Practical Data & Markup Language",
+  "patterns": [
+    {
+      "include": "#node"
+    },
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#escape-str"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.pdml",
+          "match": "\\b(if|while|for|return)\\b"
+        }
+      ]
+    },
+    "escape-str": {
+      "match": "\\\\.",
+      "name": "constant.character.escape"
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "include": "#escape-str"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "include": "#escape-str"
+            }
+          ]
+        }
+      ]
+    },
+    "comment": {
+      "begin": "\\[-",
+      "end": "-\\]",
+      "name": "comment",
+      "patterns": [
+        {
+          "include": "#comment"
+        }
+      ]
+    },
+    "attributes": {
+      "begin": "\\(",
+      "end": "\\)",
+      "captures": {
+        "0": {
+          "name": "punctuation.definition.annotation punctuation.section.group punctuation.section.parens"
+        }
+      },
+      "patterns": [
+        {
+          "begin": "[a-zA-Z_][a-zA-Z0-9_\\.-]*",
+          "beginCaptures": {
+            "0": {
+              "name": "entity.other.attribute-name"
+            }
+          },
+          "end": "(?=\\s*+[^=\\s])",
+          "patterns": [
+            {
+              "begin": "=",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.separator.key-value"
+                }
+              },
+              "end": "(?<=[^\\s=])(?!\\s*=)|(?=/?>)",
+              "patterns": [
+                {
+                  "match": "([^0-9-.\\s='\"][^\\s='\")]*)",
+                  "name": "string.unquoted.html"
+                },
+                {
+                  "match": "=",
+                  "name": "invalid.illegal.unexpected-equals-sign"
+                },
+                {
+                  "include": "#strings"
+                },
+                {
+                  "include": "#number"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "node": {
+      "begin": "(\\[)([a-zA-Z_][a-zA-Z0-9_\\.-]*)",
+      "end": "\\]",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag"
+        },
+        "2": {
+          "name": "entity.name.tag"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.tag"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#attributes"
+        },
+        {
+          "include": "#node"
+        },
+        {
+          "include": "#fenced-code"
+        },
+        {
+          "include": "#escape-str"
+        }
+      ]
+    },
+    "number": {
+      "match": "-?[0-9]*(.[0-9]+)*",
+      "name": "constant.numeric"
+    },
+    "fenced-code": {
+      "begin": "\"\"\"",
+      "end": "\"\"\"",
+      "captures": {
+        "0": {
+          "name": "string.quoted.triple"
+        }
+      },
+      "contentName": "meta.embedded.block.css",
+      "patterns": [
+        {
+          "include": "source.css"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.pdml"
+}

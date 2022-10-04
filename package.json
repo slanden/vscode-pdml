@@ -1,0 +1,38 @@
+{
+  "name": "pdml",
+  "displayName": "PDML",
+  "description": "PDML highlighting",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.71.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "pdml",
+        "aliases": [
+          "Practical Data & Markup Language",
+          "pdml"
+        ],
+        "extensions": [
+          ".pdml"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pdml",
+        "scopeName": "source.pdml",
+        "path": "./syntaxes/pdml.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.css": "css",
+          "meta.embedded.block.javascript": "javascript"
+        }
+      }
+    ]
+  }
+}
