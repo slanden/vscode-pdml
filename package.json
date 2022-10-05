@@ -1,13 +1,24 @@
 {
   "name": "pdml",
   "displayName": "PDML",
-  "description": "PDML highlighting",
-  "version": "0.0.1",
+  "description": "Practical Data & Markup Language support",
+  "publisher": "shelby-landen",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slanden/vscode-pdml.git"
+  },
   "engines": {
     "vscode": "^1.71.0"
   },
   "categories": [
     "Programming Languages"
+  ],
+  "keywords": [
+    "pdml",
+    "practical",
+    "markup",
+    "xml"
   ],
   "contributes": {
     "languages": [
@@ -37,5 +48,8 @@
         ]
       }
     ]
+  },
+  "scripts": {
+    "publish": "vsce publish"
   }
 }

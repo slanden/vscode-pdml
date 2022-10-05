@@ -1,0 +1,76 @@
+[root
+  [subnode (no-val num=0 sq='1' dq="3\d2" uq=unq dec=-0.99 [- Comment in attrs -] 42 "standalone dquote" 'standalone squote')]
+  [subnode (
+    no-value 
+    number=0
+    squote='1'
+    dquote="3\d2"
+    unquote=unq
+    invalid==
+    decimal=-0.99
+    [- Comment in attrs -]
+    42
+    "standalone dquote"
+    'standalone squote'
+  )]
+  [title Example PDML File]
+  [dashed-node]
+  [tree
+    [branch]
+    "quoted free text"
+    free text
+
+    Escaped node brackets look better colored like
+    other escape characters.
+    \[\]
+  ]
+  [- Comment inside a node -]
+]
+
+Top level escaped character \t
+
+Some [b[i bold italic text]].
+[- Top level comment -]
+[- Top level [- nested comment -] -]
+
+[- Many -]
+[- contiguous -]
+[- single-line -]
+[- comments -]
+
+[--- Embedded Code ---]
+
+[code (lang=css)
+  """
+    code {
+      background: red;
+      /* css comment */
+    }
+  """
+]
+[code (lang=css) """
+  
+"""
+]
+
+[code (lang=javascript)
+  """
+    let msg = "All good";
+    function ok(e) {
+      return {"ok": msg};
+    }
+  """
+]
+
+[--- OnEnter Rules Test ---]
+[attrs
+  [attrs (a1=1 a2)]
+]
+[bold dwa[]]
+[code]
+[multi
+  line]
+[code (
+  )]
+
+Inline [b[i text]].
