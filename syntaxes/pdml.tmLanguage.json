@@ -103,6 +103,9 @@
               ]
             }
           ]
+        },
+        {
+          "include": "#comment"
         }
       ]
     },
@@ -134,6 +137,9 @@
         },
         {
           "include": "#escape-str"
+        },
+        {
+          "include": "#comment"
         }
       ]
     },
@@ -149,8 +155,11 @@
           "name": "string.quoted.triple"
         }
       },
-      "contentName": "meta.embedded.block.css",
+      "contentName": "meta.embedded.block",
       "patterns": [
+        {
+          "include": "source.js"
+        },
         {
           "include": "source.css"
         }
