@@ -31,7 +31,10 @@
         "embeddedLanguages": {
           "meta.embedded.block.css": "css",
           "meta.embedded.block.javascript": "javascript"
-        }
+        },
+        "unbalancedBracketScopes": [
+          "constant.character.escape"
+        ]
       }
     ]
   }

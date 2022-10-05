@@ -75,26 +75,32 @@
   // "colorizedBracketPairs": [],
   "onEnterRules": [
     {
-      "beforeText": "\\]",
-      "action": {
-        "indent": "none"
-      }
-    },
-    // Immediately before an attributes section,
-    // only create 1 newline as not to imply that
-    // attributes can be placed anywhere
-    {
-      "beforeText": "\\[.*",
-      "afterText": "\\(.*\\)",
-      "action": {
-        "indent": "indent"
-      }
-    },
-    {
-      "beforeText": "\\[.*",
+      "beforeText": "\\[-.*",
+      "afterText": "^-*\\]$",
       "action": {
         "indent": "indentOutdent"
       }
     },
+    {
+      "beforeText": "\\[.*",
+      "afterText": "^[\\]]",
+      "action": {
+        "indent": "indentOutdent"
+      }
+    },
+    {
+      "beforeText": "\\[.*[^\\]]$",
+      "action": {
+        "indent": "indent"
+      }
+    },
+    // Close a node
+    {
+      "beforeText": "^[^\\[]",
+      "afterText": "^[\\]]",
+      "action": {
+        "indent": "outdent"
+      }
+    }
   ]
 }
