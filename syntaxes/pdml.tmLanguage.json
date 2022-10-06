@@ -59,53 +59,39 @@
         }
       ]
     },
-    "attributes": {
-      "begin": "\\(",
-      "end": "\\)",
-      "captures": {
+    "attribute": {
+      "begin": "[a-zA-Z_][a-zA-Z0-9_\\.-]*",
+      "beginCaptures": {
         "0": {
-          "name": "punctuation.definition.annotation punctuation.section.group punctuation.section.parens"
+          "name": "entity.other.attribute-name"
         }
       },
+      "end": "(?=\\s*+[^=\\s])",
       "patterns": [
         {
-          "begin": "[a-zA-Z_][a-zA-Z0-9_\\.-]*",
+          "begin": "=",
           "beginCaptures": {
             "0": {
-              "name": "entity.other.attribute-name"
+              "name": "punctuation.separator.key-value"
             }
           },
-          "end": "(?=\\s*+[^=\\s])",
+          "end": "(?<=[^\\s=])(?!\\s*=)|(?=/?>)",
           "patterns": [
             {
-              "begin": "=",
-              "beginCaptures": {
-                "0": {
-                  "name": "punctuation.separator.key-value"
-                }
-              },
-              "end": "(?<=[^\\s=])(?!\\s*=)|(?=/?>)",
-              "patterns": [
-                {
-                  "match": "([^0-9-.\\s='\"][^\\s='\")]*)",
-                  "name": "string.unquoted.html"
-                },
-                {
-                  "match": "=",
-                  "name": "invalid.illegal.unexpected-equals-sign"
-                },
-                {
-                  "include": "#strings"
-                },
-                {
-                  "include": "#number"
-                }
-              ]
+              "match": "([^0-9-.\\s='\"][^\\s='\")]*)",
+              "name": "string.unquoted.html"
+            },
+            {
+              "match": "=",
+              "name": "invalid.illegal.unexpected-equals-sign"
+            },
+            {
+              "include": "#strings"
+            },
+            {
+              "include": "#number"
             }
           ]
-        },
-        {
-          "include": "#comment"
         }
       ]
     },
@@ -127,7 +113,22 @@
       },
       "patterns": [
         {
-          "include": "#attributes"
+          "comment": "Attributes must start on the same line as the node.",
+          "begin": "(\\G)\\s*\\(",
+          "end": "\\)",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.annotation punctuation.section.group punctuation.section.parens"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#attribute"
+            },
+            {
+              "include": "#comment"
+            }
+          ]
         },
         {
           "include": "#node"

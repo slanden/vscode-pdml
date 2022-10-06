@@ -71,8 +71,13 @@
       "'"
     ]
   ],
-  // An empty array disables it
-  // "colorizedBracketPairs": [],
+  // An empty array would disable them
+  "colorizedBracketPairs": [
+    [
+      "[",
+      "]"
+    ]
+  ],
   "onEnterRules": [
     {
       "beforeText": "\\[-.*",
@@ -82,22 +87,22 @@
       }
     },
     {
-      "beforeText": "\\[.*",
-      "afterText": "^[\\]]",
+      "beforeText": ".*",
+      "afterText": "^\\]",
       "action": {
         "indent": "indentOutdent"
       }
     },
     {
-      "beforeText": "\\[.*[^\\]]$",
+      "beforeText": "^\\s*\\[.*",
+      "afterText": "^[^\\]]",
       "action": {
         "indent": "indent"
       }
     },
-    // Close a node
     {
-      "beforeText": "^[^\\[]",
-      "afterText": "^[\\]]",
+      "beforeText": "^[^\\[].*\\]$",
+      "afterText": "\n",
       "action": {
         "indent": "outdent"
       }

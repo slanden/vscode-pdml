@@ -20,6 +20,9 @@
     "quoted free text"
     free text
 
+    Ignore parens (dwa) that don't immediately follow
+    the start of a node.
+
     Escaped node brackets look better colored like
     other escape characters.
     \[\]
