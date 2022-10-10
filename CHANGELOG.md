@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.3.0
+
+- Added scaffolding for a language server
+- Added support for using ".pml" file extension
+
 ## 0.2.0
 
 - Fixed attributes being allowed anywhere. Now they must start on the same line as the node, and can continue on multiple lines.

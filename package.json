@@ -3,7 +3,7 @@
   "displayName": "PDML",
   "description": "Practical Data & Markup Language support",
   "publisher": "shelby-landen",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/slanden/vscode-pdml.git"
@@ -16,9 +16,14 @@
   ],
   "keywords": [
     "pdml",
+    "pml",
     "practical",
+    "data",
     "markup",
     "xml"
+  ],
+  "activationEvents": [
+    "onLanguage:pml"
   ],
   "main": "./client/out/extension",
   "contributes": {
@@ -33,6 +38,17 @@
           ".pdml"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "pml",
+        "aliases": [
+          "Practical Markup Language",
+          "pml"
+        ],
+        "extensions": [
+          ".pml"
+        ],
+        "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
@@ -40,6 +56,18 @@
         "language": "pdml",
         "scopeName": "source.pdml",
         "path": "./syntaxes/pdml.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.css": "css",
+          "meta.embedded.block.javascript": "javascript"
+        },
+        "unbalancedBracketScopes": [
+          "constant.character.escape"
+        ]
+      },
+      {
+        "language": "pml",
+        "scopeName": "source.pdml.pml",
+        "path": "./syntaxes/pml.tmLanguage.json",
         "embeddedLanguages": {
           "meta.embedded.block.css": "css",
           "meta.embedded.block.javascript": "javascript"
