@@ -1,7 +1,7 @@
 [root
-  [subnode (no-val num=0 sq='1' dq="3\d2" uq=unq dec=-0.99 [- Comment in attrs -] 42 "standalone dquote" 'standalone squote')]
+  [subnode (no-val num=0 sq='1' dq="3\d2" uq=unq dec=-0.99 [- Comment in attrs -] 42 "standalone dquote" 'standalone squote' s=/a/b)]
   [subnode (
-    no-value 
+    no-value
     number=0
     squote='1'
     dquote="3\d2"
@@ -12,11 +12,14 @@
     42
     "standalone dquote"
     'standalone squote'
+    s=/a/b
   )]
   [title Example PDML File]
   [dashed-node]
   [tree
-    [branch]
+    [branch
+      [u:set leaves=1]
+    ]
     "quoted free text"
     free text
 
@@ -77,3 +80,29 @@ Some [b[i bold italic text]].
   )]
 
 Inline [b[i text]].
+
+[- Utility Nodes -]
+
+[-
+  The content of utility nodes should be treated
+  like attributes
+-]
+[u:set color='light green']
+
+[u:set
+  width=200
+  height=100
+]
+[u:ins_file path=/path/to/file.txt]
+
+[u:get color]
+[u:get height
+]
+[t:string dasd\dsadasdasd
+  dasd\dsadsa\cddsad
+]
+[t:raw_text (lang=css)
+  """
+  daw
+  """
+]
