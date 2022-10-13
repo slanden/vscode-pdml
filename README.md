@@ -1,17 +1,19 @@
 # PDML Language Support
 
-The [Practical Data & Markup Language (PDML)](https://pdml-lang.github.io/) is a clean alternative to the XML family of languages.
+The [Practical Data & Markup Language (PDML)](https://pdml-lang.dev/) is a lean, but much more readable alternative to the XML family of languages.
 
 ## Features
 
-This extension is still a work-in-progress, but Syntax highlighting and auto-indentation for Basic PDML is implemented. PDML also provides some language extensions, but only *attributes* are currently supported by this extension.
+This extension is still a work-in-progress, but Syntax highlighting and auto-indentation for Basic PDML is implemented.
 
 ### PDML extensions
 
-The following PDML extensions are supported.
+PDML also provides some language extensions. Those supported are listed below.
 
 - Attributes
 - Comments
+- Type Nodes
+- Utility Nodes
 
 ## Known Issues
 

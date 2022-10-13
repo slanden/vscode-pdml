@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.4.0
+
+- Added support for Type nodes
+- Added support for Utility nodes
+- Added support for '~' and '=' code fence delimiters
+- Added support for 4 & 8 digit unicode escapes
+- Removed unused grammar patterns
+- Updated link to PDML website
+
 ## 0.3.0
 
 - Added scaffolding for a language server

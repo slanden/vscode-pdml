@@ -17,8 +17,20 @@
   ],
   "repository": {
     "escape-str": {
-      "match": "\\\\.",
-      "name": "constant.character.escape"
+      "patterns": [
+        {
+          "match": "\\\\u.{4}",
+          "name": "constant.character.escape"
+        },
+        {
+          "match": "\\\\U.{8}",
+          "name": "constant.character.escape"
+        },
+        {
+          "match": "\\\\.",
+          "name": "constant.character.escape"
+        }
+      ]
     },
     "strings": {
       "patterns": [
@@ -119,7 +131,7 @@
               "end": "(?=\\])",
               "beginCaptures": {
                 "2": {
-                  "name": "entity.name.tag"
+                  "name": "support.function"
                 }
               },
               "patterns": [
@@ -135,9 +147,9 @@
               "match": "(\\G)get ([a-zA-Z_][a-zA-Z0-9_\\.-]*)",
               "captures": {
                 "0": {
-                  "name": "entity.name.tag"
+                  "name": "support.function"
                 },
-                "1": {
+                "2": {
                   "name": "variable.other.constant"
                 }
               }
@@ -169,7 +181,7 @@
               "end": "(?=\\])",
               "beginCaptures": {
                 "0": {
-                  "name": "entity.name.tag"
+                  "name": "storage.type"
                 }
               },
               "patterns": [
@@ -183,7 +195,7 @@
               "end": "(?=\\])",
               "beginCaptures": {
                 "0": {
-                  "name": "entity.name.tag"
+                  "name": "storage.type"
                 }
               },
               "patterns": [
@@ -253,8 +265,8 @@
       "name": "constant.numeric"
     },
     "fenced-code": {
-      "begin": "\"\"\"",
-      "end": "\"\"\"",
+      "begin": "((\"|=|~){3,})",
+      "end": "\\1\\2*",
       "captures": {
         "0": {
           "name": "string.quoted.triple"

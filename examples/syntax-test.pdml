@@ -35,6 +35,10 @@
 
 Top level escaped character \t
 
+Unicode escapes
+\u1234not-this
+\U12345678not-this
+
 Some [b[i bold italic text]].
 [- Top level comment -]
 [- Top level [- nested comment -] -]
@@ -60,12 +64,12 @@ Some [b[i bold italic text]].
 ]
 
 [code (lang=javascript)
-  """
+  ===
     let msg = "All good";
     function ok(e) {
       return {"ok": msg};
     }
-  """
+  =====
 ]
 
 [--- OnEnter Rules Test ---]
