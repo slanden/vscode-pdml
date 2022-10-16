@@ -59,8 +59,8 @@ async function validateTextDocument(doc: TextDocument) {
       // const modes = languageModes.getAllModesInDocument(doc);
       const latestDoc = documents.get(doc.uri);
       if (latestDoc?.version === doc.version) {
-        // Check no new version has come in after in
-        // after the async op
+        // Check that no new version has come in after
+        // the async op
         // modes.forEach(mode => {
         //   if (mode.doValidation) {
         //     mode.doValidation(latestDoc).forEach(d => {
@@ -79,7 +79,7 @@ async function validateTextDocument(doc: TextDocument) {
   }
 }
 
-connection.onCompletion(async (docPosition, token) => {
+connection.onCompletion(async (docPosition) => {
   const doc = documents.get(docPosition.textDocument.uri);
   if (!doc) {
     return null;

@@ -41,6 +41,7 @@ export function activate(context: ExtensionContext) {
   const clientOptions: LanguageClientOptions = {
     // Register the server for plain text documents
     documentSelector: [
+      { scheme: 'file', language: 'pdml' },
       { scheme: 'file', language: 'pml' }
     ]
   };
