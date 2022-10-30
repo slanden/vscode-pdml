@@ -102,11 +102,42 @@ Inline [b[i text]].
 [u:get color]
 [u:get height
 ]
-[t:string dasd\dsadasdasd
+[t:string dasd\wsadasdasd
   dasd\dsadsa\cddsad
 ]
 [t:raw_text (lang=css)
   """
   daw
   """
+]
+
+[s:exp 1 + 1]
+[s:exp "string".split().join('\n')]
+[s:exp "string"
+  .split()
+  .join('\n')
+]
+[s:script "string".split().join('\n');]
+[s:script
+  ~~~
+  const licenseFile = "resources/license.txt"
+  if ( fileUtils.exists ( licenseFile ) ) {
+      doc.insert ( fileUtils.readText ( licenseFile ) );
+  } else {
+      stderr.writeLine ( "WARNING: No license file found!" );
+  }
+  ~~~
+]
+[s:def
+  ~~~
+  const PI = 3.1415926;
+
+  function computeCircumference ( radius ) {
+      return 2 * PI * radius;
+  }
+
+  function computeArea ( radius ) {
+      return PI * radius * radius;
+  }
+  ~~~
 ]

@@ -10,21 +10,16 @@ export const pdmlCompletions = {
   namespaces(pos: Position) {
     return CompletionList.create([
       {
-        label: 'u',
+        label: 's',
         kind: CompletionItemKind.Module,
         data: 1,
-        documentation: mDoc(`PDML Extension: Utility Nodes
+        documentation: mDoc(`PDML Extension: Script Nodes
 [PDML Reference](${DOC_BASE_URL
-          }${DOC_EXT_REF_SUBDIR}/#utility_nodes)`),
-        textEdit: { newText: 'u:', range: { start: pos, end: pos } },
+          }/docs/extensions/user_manual/#script_nodes)`),
+        textEdit: { newText: 's:', range: { start: pos, end: pos } },
         // `title` is required but empty because it's never shown
         command: { command: CMD_TRIGGER_SUGGEST, title: '' },
       },
-      // {
-      //   label: 's',
-      //   kind: CompletionItemKind.Module,
-      //   data: 2
-      // },
       {
         label: 't',
         kind: CompletionItemKind.Module,
@@ -34,7 +29,53 @@ export const pdmlCompletions = {
           }${DOC_EXT_REF_SUBDIR}/#types)`),
         textEdit: { newText: 't:', range: { start: pos, end: pos } },
         command: { command: CMD_TRIGGER_SUGGEST, title: '' }
-      }
+      },
+      {
+        label: 'u',
+        kind: CompletionItemKind.Module,
+        data: 3,
+        documentation: mDoc(`PDML Extension: Utility Nodes
+[PDML Reference](${DOC_BASE_URL
+          }${DOC_EXT_REF_SUBDIR}/#utility_nodes)`),
+        textEdit: { newText: 'u:', range: { start: pos, end: pos } },
+        // `title` is required but empty because it's never shown
+        command: { command: CMD_TRIGGER_SUGGEST, title: '' },
+      },
+    ]);
+  },
+  /** @returns {CompletionList} */
+  scriptNodes() {
+    return CompletionList.create([
+      {
+        label: 'def',
+        kind: CompletionItemKind.Function,
+        data: 1,
+        documentation: mDoc(`An \`s:def\` is used to define constants, variables, and functions that will later be used in \`s:exp\` or \`s:script\` nodes.
+
+\`s:def\` nodes must be declared before using them in \`s:exp\` or \`s:script\` nodes.
+
+[PDML Reference](${DOC_BASE_URL
+          }/docs/extensions/user_manual/#definition_node)`)
+      },
+      {
+        label: 'exp',
+        kind: CompletionItemKind.Function,
+        data: 2,
+        documentation: mDoc(`An \`s:exp\` node evaluates an expression and inserts the result into the document.
+
+[PDML Reference](${DOC_BASE_URL
+          }/docs/extensions/user_manual/#expression_node)`)
+      },
+      {
+        label: 'script',
+        kind: CompletionItemKind.Function,
+        data: 3,
+        documentation: mDoc(`An \`s:script\` node embeds a regular script that can contain multiple statements. Any output from the script is not inserted into the document like in an \`s:exp\` node. To insert into the document, you must call [\`doc.insert\`](${DOC_BASE_URL
+          }${DOC_EXT_REF_SUBDIR}/#doc-insert).
+
+[PDML Reference](${DOC_BASE_URL
+          }/docs/extensions/user_manual/#script_node)`)
+      },
     ]);
   },
   /** @returns {CompletionList} */

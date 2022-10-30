@@ -23,6 +23,7 @@
     "xml"
   ],
   "activationEvents": [
+    "onLanguage:pdml",
     "onLanguage:pml"
   ],
   "main": "./client/out/extension",

@@ -205,6 +205,72 @@
               ]
             }
           ]
+        },
+        {
+          "begin": "(\\[)(s)(:)",
+          "end": "\\]",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag"
+            },
+            "2": {
+              "name": "entity.name.namespace"
+            },
+            "3": {
+              "name": "keyword.operator"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.tag"
+            }
+          },
+          "patterns": [
+            {
+              "comment": "Single-line script",
+              "match": "(\\G)(exp|script|def)\\s(.*)(?=\\])",
+              "captures": {
+                "2": {
+                  "name": "meta.preprocessor support.function"
+                },
+                "3": {
+                  "name": "meta.embedded.block.javascript",
+                  "patterns": [
+                    {
+                      "include": "source.js"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "begin": "(\\G)(exp|script|def)",
+              "end": "(?=\\])",
+              "beginCaptures": {
+                "2": {
+                  "name": "meta.preprocessor support.function"
+                }
+              },
+              "patterns": [
+                {
+                  "comment": "Duplicated 'fenced-code' because `contentName` is different for difference code blocks, i.e. `style` nodes",
+                  "begin": "((\"|=|~){3,})",
+                  "end": "\\1\\2*",
+                  "captures": {
+                    "0": {
+                      "name": "string.quoted.triple"
+                    }
+                  },
+                  "contentName": "meta.embedded.block.javascript",
+                  "patterns": [
+                    {
+                      "include": "source.js"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },

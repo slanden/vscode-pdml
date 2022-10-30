@@ -1,4 +1,4 @@
-const { MarkupContent, MarkupKind } = require('vscode-languageserver/node')
+const { MarkupContent, MarkupKind } = require('vscode-languageserver/node');
 
 /** @returns {MarkupContent} A Markdown doc object */
 function mDoc(markdownString) {
@@ -8,7 +8,7 @@ function mDoc(markdownString) {
   }
 }
 
-// ! This works in production, but not in testing
+// ! This works in production, but not in testing;
 // ! Something to do with escaping characters.
 /**
  * Search from the end of *haystack* for *needle*,
@@ -30,7 +30,7 @@ function rfindUnless(needle, haystack, index, spider = undefined) {
     }
     if (haystack.charAt(needlePos) === needle && (
       needlePos == 0 ||
-      linePrefix.charAt(needlePos - 1) !== '\\'
+      haystack.charAt(needlePos - 1) !== '\\'
     )) {
       return needlePos;
     }

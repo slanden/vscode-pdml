@@ -60,11 +60,14 @@ export function getLanguageModes(): Map<String, LanguageMode> {
               pos.character - 1
             );
 
-            if (namespace === 'u') {
-              return pdmlCompletions.utilNodes();
+            if (namespace === 's') {
+              return pdmlCompletions.scriptNodes();
             }
             if (namespace === 't') {
               return pdmlCompletions.typeNodes();
+            }
+            if (namespace === 'u') {
+              return pdmlCompletions.utilNodes();
             }
           }
 
