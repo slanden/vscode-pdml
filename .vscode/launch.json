@@ -13,12 +13,8 @@
         "--extensionDevelopmentPath=${workspaceRoot}"
       ],
       "outFiles": [
-        "${workspaceRoot}/client/out/**/*.js"
-      ],
-      "preLaunchTask": {
-        "type": "npm",
-        "script": "watch"
-      }
+        "${workspaceRoot}/dist/extension*"
+      ]
     },
     {
       "type": "node",
@@ -27,7 +23,7 @@
       "port": 6009,
       "restart": true,
       "outFiles": [
-        "${workspaceRoot}/server/out/**/*.js"
+        "${workspaceRoot}/dist/server*"
       ]
     },
   ],

@@ -1,13 +1,9 @@
-# Vendor stuff
-**/node_modules/**/README.*
-**/{thirdpartynotices,License}.txt
-**/node_modules/**/{LICENSE,.github}
-.travis.yml
-# Project stuff
 **/*.map
 **/tsconfig.json
-**/*.ts
+node_modules
+client
+server
+examples
 .vscode/**
 .gitignore
-examples
 CHANGELOG.md

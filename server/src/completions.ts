@@ -14,6 +14,7 @@ export const pdmlCompletions = {
         kind: CompletionItemKind.Module,
         data: 1,
         documentation: mDoc(`PDML Extension: Script Nodes
+
 [PDML Reference](${DOC_BASE_URL
           }/docs/extensions/user_manual/#script_nodes)`),
         textEdit: { newText: 's:', range: { start: pos, end: pos } },
@@ -25,6 +26,7 @@ export const pdmlCompletions = {
         kind: CompletionItemKind.Module,
         data: 2,
         documentation: mDoc(`PDML Extension: Type Nodes
+
 [PDML Reference](${DOC_BASE_URL
           }${DOC_EXT_REF_SUBDIR}/#types)`),
         textEdit: { newText: 't:', range: { start: pos, end: pos } },
@@ -35,6 +37,7 @@ export const pdmlCompletions = {
         kind: CompletionItemKind.Module,
         data: 3,
         documentation: mDoc(`PDML Extension: Utility Nodes
+
 [PDML Reference](${DOC_BASE_URL
           }${DOC_EXT_REF_SUBDIR}/#utility_nodes)`),
         textEdit: { newText: 'u:', range: { start: pos, end: pos } },

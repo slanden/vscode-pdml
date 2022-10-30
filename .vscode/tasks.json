@@ -3,31 +3,13 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "compile",
-      "group": "build",
-      "presentation": {
-        "panel": "dedicated",
-        "reveal": "never"
-      },
-      "problemMatcher": [
-        "$tsc"
-      ]
-    },
-    {
-      "type": "npm",
-      "script": "watch",
-      "isBackground": true,
+      "script": "esbuild-watch",
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "presentation": {
-        "panel": "dedicated",
-        "reveal": "never"
-      },
-      "problemMatcher": [
-        "$tsc-watch"
-      ]
+      "problemMatcher": [],
+      "label": "npm: esbuild-watch"
     }
   ]
 }
