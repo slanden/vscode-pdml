@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.5.0
+
+- Added support for Script nodes
+- Added completions for all PDML Extension nodes
+- Added logo
+- Added file icon
+- Reduced packaged extension size
+
 ## 0.4.0
 
 - Added support for Type nodes

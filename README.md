@@ -4,16 +4,19 @@ The [Practical Data & Markup Language (PDML)](https://pdml-lang.dev/) is a lean,
 
 ## Features
 
-This extension is still a work-in-progress, but Syntax highlighting and auto-indentation for Basic PDML is implemented.
+This extension is still a work-in-progress, but includes the following features.
 
-### PDML extensions
+- Syntax highlighting
+- Auto-indentation
+- Code Completion for Extension Nodes
 
-PDML also provides some language extensions. Those supported are listed below.
+### PDML Extensions
+
+The following language extensions are also supported.
 
 - Attributes
 - Comments
-- Type Nodes
-- Utility Nodes
+- Extension Nodes
 
 ## Known Issues
 

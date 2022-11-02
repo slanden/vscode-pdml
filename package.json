@@ -2,8 +2,9 @@
   "name": "pdml",
   "displayName": "PDML",
   "description": "Practical Data & Markup Language support",
+  "icon": "images/logo.png",
   "publisher": "shelby-landen",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/slanden/vscode-pdml.git"
@@ -38,7 +39,11 @@
         "extensions": [
           ".pdml"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "dark": "images/file-icon.svg",
+          "light": "images/file-icon.svg"
+        }
       },
       {
         "id": "pml",
