@@ -86,7 +86,7 @@ connection.onCompletion(async (docPosition) => {
   }
 
   return languageModes.get(doc.languageId)?.
-    doComplete?.(doc, docPosition.position) ??
+    getCompletions?.(doc, docPosition.position) ??
     CompletionList.create();
 });
 

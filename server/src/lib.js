@@ -38,7 +38,42 @@ function rfindUnless(needle, haystack, index, spider = undefined) {
   }
 }
 
+/**@typedef {Symbol} CompletionType */
+const CompletionType = Object.freeze({
+  Empty: Symbol(0),
+  BeginNode: Symbol(1),
+  EndNamespace: Symbol(2),
+});
+
+/** The second item will be the node name if the
+ * `CompletionType` needs it
+ * @typedef {[CompletionType, string | undefined]} CompletionHint
+ */
+
+/**@returns {CompletionHint} */
+function getCompletionHint(lineText, index) {
+  if (lineText.endsWith('[')) {
+    return [CompletionType.BeginNode, undefined];
+  } else if (lineText.endsWith(':')) {
+    const nodeStart = rfindUnless(
+      '[',
+      lineText, index - 1,
+      /\s/
+    );
+
+    if (nodeStart !== undefined) {
+      return [
+        CompletionType.EndNamespace,
+        lineText.substring(nodeStart + 1, index - 1)
+      ];
+    }
+  }
+  return [CompletionType.Empty, undefined];
+}
+
 module.exports = {
+  CompletionType,
+  getCompletionHint,
   mDoc,
   rfindUnless
 }

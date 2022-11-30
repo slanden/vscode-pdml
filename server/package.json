@@ -12,6 +12,6 @@
     "baretest": "^2.0.0"
   },
   "scripts": {
-    "test": "node src/tests.js"
+    "test": "node tests/tests.js"
   }
 }
