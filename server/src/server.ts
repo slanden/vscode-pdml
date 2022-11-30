@@ -34,7 +34,8 @@ connection.onInitialize((_params: InitializeParams) => {
       textDocumentSync: TextDocumentSyncKind.Full,
       // Tell the client this server supports code completion
       completionProvider: {
-        resolveProvider: false
+        resolveProvider: false,
+        triggerCharacters: ['[']
       }
     }
   };

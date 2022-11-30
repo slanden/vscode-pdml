@@ -8,8 +8,8 @@ function mDoc(markdownString) {
   }
 }
 
-// ! This works in production, but not in testing;
-// ! Something to do with escaping characters.
+//* This works in production, but not in testing;
+//* Something to do with escaping characters.
 /**
  * Search from the end of *haystack* for *needle*,
  * return undefined if *spider* found.
