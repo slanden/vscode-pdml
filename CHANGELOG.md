@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.6.0
+
+- Added '[' as a completion trigger character
+- Added completions for PML nodes
+- Added the file icon to PML files
+- Optimized the file icon
+
 ## 0.5.0
 
 - Added support for Script nodes
