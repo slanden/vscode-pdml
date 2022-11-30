@@ -4,75 +4,63 @@
 
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import {
+  CompletionItem,
   CompletionList,
   // Diagnostic,
   Position
 } from 'vscode-languageserver/node';
-import { pdmlCompletions } from './completions'
-import { rfindUnless } from './lib';
-
+import { pdmlNamespaces, pdmlScriptNodes, pdmlTypeNodes, pdmlUtilNodes } from './completions'
+import { CompletionType, getCompletionHint, rfindUnless } from './lib';
 
 export interface LanguageMode {
-  doComplete?: (document: TextDocument, position: Position) => CompletionList;
+  getCompletions?: (document: TextDocument, position: Position) => CompletionList;
+}
+
+function pdmlNamespaceNodes(name: string): CompletionItem[] {
+  switch (name) {
+    case 's': {
+      return pdmlScriptNodes();
+    }
+    case 't': {
+      return pdmlTypeNodes();
+    }
+    case 'u': {
+      return pdmlUtilNodes();
+    }
+    default: return [];
+  }
+}
+
+function getCompletions(doc: TextDocument, pos: Position): CompletionList {
+  const [hint, name] = getCompletionHint(doc.getText({
+    start: {
+      line: pos.line,
+      character: 0
+    },
+    end: pos
+  }), pos.character);
+  // TODO: Build lists from PML list *and* PDML list
+  switch (hint) {
+    case CompletionType.BeginNode: {
+      return CompletionList.create(pdmlNamespaces(pos));
+    }
+    case CompletionType.EndNamespace: {
+      return CompletionList.create([...pdmlNamespaceNodes(name ?? '')]);
+    }
+    default: return CompletionList.create();
+  }
 }
 
 export function getLanguageModes(): Map<String, LanguageMode> {
   return new Map([
-    // [
-    //   'pml', <LanguageMode>{
-    //     doComplete(doc: TextDocument, pos: Position): CompletionList {
-    //       return CompletionList.create([
-    //         {
-    //           label: 'Cowabunga',
-    //           kind: CompletionItemKind.Text,
-    //           data: 1
-    //         }
-    //       ])
-    //     }
-    //   }
-    // ],
+    [
+      'pml', <LanguageMode>{
+        getCompletions
+      }
+    ],
     [
       'pdml', <LanguageMode>{
-        doComplete(doc: TextDocument, pos: Position): CompletionList {
-          const linePrefix = doc.getText({
-            start: {
-              line: pos.line,
-              character: 0
-            },
-            end: pos
-          });
-
-          if (linePrefix.endsWith('[')) {
-            return pdmlCompletions.namespaces(pos);
-          } else if (linePrefix.endsWith(':')) {
-            const nodeStart = rfindUnless(
-              '[',
-              linePrefix, pos.character - 1,
-              /\s/
-            );
-
-            if (nodeStart === undefined) {
-              return CompletionList.create();
-            }
-
-            const namespace = linePrefix.substring(
-              nodeStart + 1,
-              pos.character - 1
-            );
-
-            if (namespace === 's') {
-              return pdmlCompletions.scriptNodes();
-            }
-            if (namespace === 't') {
-              return pdmlCompletions.typeNodes();
-            }
-            if (namespace === 'u') {
-              return pdmlCompletions.utilNodes();
-            }
-          }
-
-          return CompletionList.create();
-        }
+        getCompletions
       }
     ],
   ]);
