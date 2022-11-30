@@ -54,7 +54,11 @@
         "extensions": [
           ".pml"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "dark": "images/file-icon.svg",
+          "light": "images/file-icon.svg"
+        }
       }
     ],
     "grammars": [
