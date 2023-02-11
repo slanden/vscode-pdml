@@ -7,18 +7,27 @@
     dquote="3\d2"
     unquote=unq
     invalid==
-    decimal=-0.99
+    decimal= -0.99
     [- Comment in attrs -]
+
+    tally=[u:get tally]
     42
     "standalone dquote"
     'standalone squote'
-    s=/a/b
+    s= /a/b
+    path = C:\name\test ok
   )]
+  [subnode
+    (attr=3)
+  ]
   [title Example PDML File]
   [dashed-node]
   [tree
     [branch
       [u:set leaves=1]
+      [u:set leaves=1
+        more leaves = "green"
+      ]
     ]
     "quoted free text"
     free text
@@ -50,6 +59,15 @@ Some [b[i bold italic text]].
 
 [--- Embedded Code ---]
 
+[code
+  """
+    code {
+      background: red;
+      /* css comment */
+    }
+  """
+]
+
 [code (lang=css)
   """
     code {
@@ -72,6 +90,8 @@ Some [b[i bold italic text]].
   =====
 ]
 
+[not-code "="]
+
 [--- OnEnter Rules Test ---]
 [attrs
   [attrs (a1=1 a2)]
@@ -91,13 +111,13 @@ Inline [b[i text]].
   The content of utility nodes should be treated
   like attributes
 -]
-[u:set color='light green']
+[u:set color= 'light green']
 
 [u:set
   width=200
-  height=100
+  height = 100
 ]
-[u:ins_file path=/path/to/file.txt]
+[u:ins_file path = /path/to/file.txt]
 
 [u:get color]
 [u:get height
