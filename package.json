@@ -4,7 +4,7 @@
   "description": "Practical Data & Markup Language support",
   "icon": "images/logo.png",
   "publisher": "shelby-landen",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/slanden/vscode-pdml.git"
@@ -89,6 +89,7 @@
     ]
   },
   "scripts": {
+    "build-parser": "wasm-pack build ../pdml-parser --out-dir ../vscode-pdml/parser --target nodejs -- --config opt-level=\"'s'\" && rm parser/.gitignore && rm parser/package.json",
     "vscode:prepublish": "npm install && npm run esbuild-base -- --minify",
     "esbuild-base1": "rimraf dist && esbuild ./server/src/server.ts --bundle --outfile=dist/server.mjs --format=esm --external:vscode --platform=node --target=es2020 && esbuild ./client/src/extension.ts --bundle --outfile=dist/extension.js --format=esm --external:vscode --platform=node --target=es2020",
     "esbuild-base": "rimraf dist && esbuild ./server/src/server.ts ./client/src/extension.ts --bundle --outdir=dist --entry-names=[name] --external:vscode --platform=node --target=es2020",
@@ -100,10 +101,10 @@
     "watch": "tsc -b -w"
   },
   "devDependencies": {
-    "@types/node": "^18.11.9",
-    "esbuild": "^0.15.16",
+    "@types/node": "^18.13.0",
+    "esbuild": "^0.17.7",
     "mv": "^2.1.1",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.9.3"
+    "rimraf": "^4.1.2",
+    "typescript": "^4.9.5"
   }
 }

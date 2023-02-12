@@ -1,4 +1,4 @@
-[root
+sas[root
   [subnode (no-val num=0 sq='1' dq="3\d2" uq=unq dec=-0.99 [- Comment in attrs -] 42 "standalone dquote" 'standalone squote' s=/a/b)]
   [subnode (
     no-value
@@ -138,7 +138,7 @@ Inline [b[i text]].
   .join('\n')
 ]
 [s:script "string".split().join('\n');]
-[s:script
+[s:script (dwa)
   ~~~
   const licenseFile = "resources/license.txt"
   if ( fileUtils.exists ( licenseFile ) ) {

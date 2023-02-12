@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.7.0
+
+- Added linting
+- Added support for Extension nodes as attribute values
+- Fixed raw-text delimiters not checked for three of a kind, i.e. "=" should not count as the three needed delimiters to open a block
+- Fixed some cases of attributes not highlighting correctly
+
 ## 0.6.0
 
 - Added '[' as a completion trigger character

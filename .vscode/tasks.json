@@ -8,8 +8,36 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": [],
-      "label": "npm: esbuild-watch"
+      "problemMatcher": [
+        {
+          "severity": "error",
+          "applyTo": "closedDocuments",
+          "source": "esbuild",
+          "owner": "typescript",
+          "fileLocation": "relative",
+          "pattern": [
+            {
+              "regexp": "> (.*?):([0-9]+):([0-9]+): (warning|error): (.+)$",
+              "file": 1,
+              "line": 2,
+              "column": 3,
+              "severity": 4,
+              "message": 5
+            }
+          ],
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": {
+              "regexp": "\\[watch\\] build started"
+            },
+            "endsPattern": {
+              "regexp": "\\[watch\\] build finished"
+            }
+          }
+        }
+      ],
+      "label": "npm: esbuild-watch",
+      "isBackground": true
     }
   ]
 }

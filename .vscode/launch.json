@@ -14,6 +14,12 @@
       ],
       "outFiles": [
         "${workspaceRoot}/dist/extension*"
+      ],
+      // Without this, Something keeps trying to look
+      // for map files in node_modules. This probably
+      // breaks debugging, but it shuts up so..
+      "resolveSourceMapLocations": [
+        "z"
       ]
     },
     {
@@ -24,6 +30,9 @@
       "restart": true,
       "outFiles": [
         "${workspaceRoot}/dist/server*"
+      ],
+      "resolveSourceMapLocations": [
+        "z"
       ]
     },
   ],
@@ -33,7 +42,8 @@
       "configurations": [
         "Launch Client",
         "Attach to Server"
-      ]
+      ],
+      "preLaunchTask": "npm: esbuild-watch"
     }
   ]
 }
