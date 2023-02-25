@@ -119,14 +119,20 @@
           },
           "patterns": [
             {
-              "begin": "(\\G)(set|ins_file)",
+              "begin": "(\\G)set|ins_file",
               "end": "(?=\\])",
               "beginCaptures": {
-                "2": {
+                "0": {
                   "name": "support.function"
                 }
               },
               "patterns": [
+                {
+                  "include": "#attribute-section"
+                },
+                {
+                  "include": "#attribute-section-alt"
+                },
                 {
                   "include": "#attribute"
                 },
@@ -136,15 +142,25 @@
               ]
             },
             {
-              "match": "(\\G)get ([a-zA-Z_][a-zA-Z0-9_\\.-]*)",
-              "captures": {
+              "begin": "(\\G)get",
+              "end": "(?=\\])",
+              "beginCaptures": {
                 "0": {
                   "name": "support.function"
-                },
-                "2": {
-                  "name": "variable.other.constant"
                 }
-              }
+              },
+              "patterns": [
+                {
+                  "include": "#attribute-section"
+                },
+                {
+                  "include": "#attribute-section-alt"
+                },
+                {
+                  "include": "#comment"
+                }
+              ],
+              "contentName": "entity.other.attribute-name"
             }
           ]
         },
@@ -179,6 +195,12 @@
               "patterns": [
                 {
                   "include": "#escape-str"
+                },
+                {
+                  "include": "#attribute-section"
+                },
+                {
+                  "include": "#comment"
                 }
               ]
             },
@@ -191,6 +213,15 @@
                 }
               },
               "patterns": [
+                {
+                  "include": "#attribute-section"
+                },
+                {
+                  "include": "#attribute-section-alt"
+                },
+                {
+                  "include": "#comment"
+                },
                 {
                   "include": "#fenced-code"
                 }
@@ -219,31 +250,49 @@
           },
           "patterns": [
             {
-              "comment": "Single-line script",
-              "match": "(\\G)(exp|script|def)\\s(.*)(?=\\])",
-              "captures": {
-                "2": {
-                  "name": "meta.preprocessor support.function"
-                },
-                "3": {
-                  "name": "meta.embedded.block.javascript",
-                  "patterns": [
-                    {
-                      "include": "source.js"
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "begin": "(\\G)(exp|script|def)",
+              "begin": "(\\G)(exp|script|def)\\s*(?:(?:(\\[@)([^\\(\\)\\[\\]]*)(\\]))|(?:(\\()([^\\(\\)\\[\\]]*)(\\))))?\\s*$",
               "end": "(?=\\])",
               "beginCaptures": {
                 "2": {
                   "name": "meta.preprocessor support.function"
+                },
+                "3": {
+                  "name": "punctuation.definition.annotation punctuation.section.group"
+                },
+                "4": {
+                  "patterns": [
+                    {
+                      "include": "#attribute"
+                    }
+                  ]
+                },
+                "5": {
+                  "name": "punctuation.definition.annotation punctuation.section.group"
+                },
+                "6": {
+                  "name": "punctuation.definition.annotation punctuation.section.group"
+                },
+                "7": {
+                  "patterns": [
+                    {
+                      "include": "#attribute"
+                    }
+                  ]
+                },
+                "8": {
+                  "name": "punctuation.definition.annotation punctuation.section.group"
                 }
               },
               "patterns": [
+                {
+                  "include": "#attribute-section"
+                },
+                {
+                  "include": "#attribute-section-alt"
+                },
+                {
+                  "include": "#comment"
+                },
                 {
                   "comment": "Duplicated 'fenced-code' because `contentName` is different for difference code blocks, i.e. `style` nodes",
                   "begin": "((\"|=|~)\\2{2,})$",
@@ -259,6 +308,48 @@
                       "include": "source.js"
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "comment": "For attributes to work in single-line script nodes, they cannot have nodes inside them.",
+              "begin": "(\\G)(exp|script|def)\\s*(?:(?:(\\[@)([^\\(\\)\\[\\]]*)(\\]))|(?:(\\()([^\\(\\)\\[\\]]*)(\\))))?\\s*(?=[^\\s])",
+              "end": "(?=\\])",
+              "beginCaptures": {
+                "2": {
+                  "name": "meta.preprocessor support.function"
+                },
+                "3": {
+                  "name": "punctuation.definition.annotation punctuation.section.group"
+                },
+                "4": {
+                  "patterns": [
+                    {
+                      "include": "#attribute"
+                    }
+                  ]
+                },
+                "5": {
+                  "name": "punctuation.definition.annotation punctuation.section.group"
+                },
+                "6": {
+                  "name": "punctuation.definition.annotation punctuation.section.group"
+                },
+                "7": {
+                  "patterns": [
+                    {
+                      "include": "#attribute"
+                    }
+                  ]
+                },
+                "8": {
+                  "name": "punctuation.definition.annotation punctuation.section.group"
+                }
+              },
+              "contentName": "meta.embedded.block.javascript",
+              "patterns": [
+                {
+                  "include": "source.js"
                 }
               ]
             }
@@ -287,6 +378,9 @@
           "include": "#attribute-section"
         },
         {
+          "include": "#attribute-section-alt"
+        },
+        {
           "include": "#xnode"
         },
         {
@@ -309,7 +403,7 @@
     },
     "fenced-code": {
       "begin": "((\"|=|~)\\2{2,})$",
-      "end": "\\1+",
+      "end": "\\1",
       "captures": {
         "0": {
           "name": "string.quoted.triple"
@@ -326,6 +420,23 @@
       ]
     },
     "attribute-section": {
+      "begin": "\\[@",
+      "end": "]",
+      "captures": {
+        "0": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#attribute"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    },
+    "attribute-section-alt": {
       "comment": "Attributes must start on the same line as the node.",
       "begin": "(\\G)\\s*\\(",
       "end": "\\)",
@@ -346,6 +457,195 @@
     "invalid-equal-sign": {
       "match": "(?<=[=(])=|=(?=\\))",
       "name": "invalid.illegal.unexpected-equals-sign"
+    },
+    "single-line-script": {
+      "comment": "For attributes to work in single-line script nodes, they cannot have nodes inside them.",
+      "match": "(\\[)(s)(:)(exp|script|def)\\s*(?:(?:(\\[@)([^\\(\\)\\[\\]]*)(\\]))|(?:(\\()([^\\(\\)\\[\\]]*)(\\))))?(.*)(\\])$",
+      "captures": {
+        "1": {
+          "name": "punctuation.definition.tag"
+        },
+        "2": {
+          "name": "entity.name.namespace"
+        },
+        "3": {
+          "name": "keyword.operator"
+        },
+        "4": {
+          "name": "meta.preprocessor support.function"
+        },
+        "5": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "6": {
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        "7": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "8": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "9": {
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        "10": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "11": {
+          "name": "meta.embedded.block.javascript",
+          "patterns": [
+            {
+              "include": "source.js"
+            }
+          ]
+        },
+        "12": {
+          "name": "punctuation.definition.tag"
+        }
+      }
+    },
+    "single-line-script-v2": {
+      "comment": "For attributes to work in single-line script nodes, they cannot have nodes inside them.",
+      "begin": "(\\[)(s)(:)(exp|script|def)\\s*(?:(?:(\\[@)([^\\(\\)\\[\\]]*)(\\]))|(?:(\\()([^\\(\\)\\[\\]]*)(\\))))?\\s*(?=[^\\s])",
+      "end": "\\]",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag"
+        },
+        "2": {
+          "name": "entity.name.namespace"
+        },
+        "3": {
+          "name": "keyword.operator"
+        },
+        "4": {
+          "name": "meta.preprocessor support.function"
+        },
+        "5": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "6": {
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        "7": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "8": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "9": {
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        "10": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.tag"
+        }
+      },
+      "contentName": "meta.embedded.block.javascript",
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    },
+    "single-line-script-nested-version": {
+      "comment": "For attributes to work in single-line script nodes, they cannot have nodes inside them.",
+      "begin": "(\\G)(exp|script|def)\\s*(?:(?:(\\[@)([^\\(\\)\\[\\]]*)(\\]))|(?:(\\()([^\\(\\)\\[\\]]*)(\\))))?\\s*(?=[^\\s])",
+      "end": "(?=\\])",
+      "beginCaptures": {
+        "2": {
+          "name": "meta.preprocessor support.function"
+        },
+        "3": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "4": {
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        "5": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "6": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        },
+        "7": {
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        "8": {
+          "name": "punctuation.definition.annotation punctuation.section.group"
+        }
+      },
+      "contentName": "meta.embedded.block.javascript",
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    },
+    "multi-line-script-nested": {
+      "begin": "(\\G)exp|script|def",
+      "end": "(?=\\])",
+      "beginCaptures": {
+        "0": {
+          "name": "meta.preprocessor support.function"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#attribute-section"
+        },
+        {
+          "include": "#attribute-section-alt"
+        },
+        {
+          "include": "#comment"
+        },
+        {
+          "comment": "Duplicated 'fenced-code' because `contentName` is different for difference code blocks, i.e. `style` nodes",
+          "begin": "((\"|=|~)\\2{2,})$",
+          "end": "\\1",
+          "captures": {
+            "0": {
+              "name": "string.quoted.triple"
+            }
+          },
+          "contentName": "meta.embedded.block.javascript",
+          "patterns": [
+            {
+              "include": "source.js"
+            }
+          ]
+        }
+      ]
     }
   },
   "scopeName": "source.pdml"

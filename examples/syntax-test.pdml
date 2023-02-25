@@ -40,6 +40,23 @@ sas[root
     \[\]
   ]
   [- Comment inside a node -]
+
+  [html[--](lang="en")
+    [head
+      [meta charset="UTF-8"]
+      [meta name="viewport" content="width=device-width, initial-scale=1.0"]
+      [title Document]
+    ]
+    [body
+      [@ a=b c="de"]
+      [ul
+        [li]
+        [li]
+        [li]
+      ]
+    ]
+  ]
+  
 ]
 
 Top level escaped character \t
@@ -105,10 +122,10 @@ Some [b[i bold italic text]].
 
 Inline [b[i text]].
 
-[- Utility Nodes -]
+[- Extension Nodes -]
 
 [-
-  The content of utility nodes should be treated
+  The content of `u` nodes should be treated
   like attributes
 -]
 [u:set color= 'light green']
@@ -125,20 +142,14 @@ Inline [b[i text]].
 [t:string dasd\wsadasdasd
   dasd\dsadsa\cddsad
 ]
-[t:raw_text (lang=css)
-  """
-  daw
-  """
-]
 
 [s:exp 1 + 1]
-[s:exp "string".split().join('\n')]
-[s:exp "string"
+[s:exp[@ ok=de] "string"
   .split()
   .join('\n')
 ]
 [s:script "string".split().join('\n');]
-[s:script (dwa)
+[s:script
   ~~~
   const licenseFile = "resources/license.txt"
   if ( fileUtils.exists ( licenseFile ) ) {
@@ -160,4 +171,39 @@ Inline [b[i text]].
       return PI * radius * radius;
   }
   ~~~
+]
+
+[- Attributes in extension nodes -]
+[u:get [@ attr1 attr2="something"]]
+[u:ins_file [@ attr1 attr2="something"] path=a/b]
+[u:set [@ attr1 attr2="something"] 
+  a=b
+  c=23
+]
+[t:date [@ attr1 attr2="something"]]
+[t:raw_text (lang=css)
+  """
+  daw
+  """
+]
+[t:raw_text [@ attr1 attr2="something"]
+  """
+  """
+]
+[t:string [@ attr1 attr2="something"]]
+[s:exp(attr) "string".split().join('\n')]
+[s:exp(attr1 attr2="something" c=34) let ok = 'good()';]
+[s:def[@ attr1 attr2="something"] let ok = 'good';]
+[s:def[@ attr1 attr2="something"] let ok = 'good[]';]
+[s:script [@ attr1=red attr2="something" 32] let ok = 'good';
+  ~~~
+  ~~~
+]
+[s:script [@ attr1=red attr2="something" 32]
+  ===
+  ===
+]
+[s:script ( attr1 attr2="something")
+  """
+  """
 ]
