@@ -57,7 +57,6 @@ documents.onDidChangeContent(change => {
 async function validateTextDocument(doc: TextDocument) {
   try {
     const diagnostics: Diagnostic[] = [];
-    // if (doc.languageId === 'pml') {}
     // const modes = languageModes.getAllModesInDocument(doc);
     const latestDoc = documents.get(doc.uri);
     if (latestDoc?.version === doc.version) {
@@ -71,16 +70,37 @@ async function validateTextDocument(doc: TextDocument) {
       //   }
       // });
       let parseResult = parse(new TextEncoder().encode(latestDoc.getText()));
-      for (let i = 0; i < parseResult.len(); ++i) {
-        diagnostics.push({
-          message: parseResult.get_msg(i),
-          range: {
-            start: latestDoc.positionAt(parseResult.get_start(i)),
-            end: latestDoc.positionAt(parseResult.get_end(i))
-          },
-          severity: parseResult.get_severity(i) as DiagnosticSeverity,
-        });
+
+      if (doc.languageId === 'pml') {
+        let doc_index;
+        for (let i = 0; i < parseResult.diag_len(); ++i) {
+          if (doc_index == undefined &&
+            parseResult.node_name(parseResult.diag_node_index(i)) === 'doc') {
+            doc_index = parseResult.diag_node_index(i);
+            continue;
+          }
+          diagnostics.push({
+            message: parseResult.diag_msg(i),
+            range: {
+              start: latestDoc.positionAt(parseResult.diag_start(i)),
+              end: latestDoc.positionAt(parseResult.diag_end(i))
+            },
+            severity: parseResult.diag_severity(i) as DiagnosticSeverity,
+          });
+        }
+      } else {
+        for (let i = 0; i < parseResult.diag_len(); ++i) {
+          diagnostics.push({
+            message: parseResult.diag_msg(i),
+            range: {
+              start: latestDoc.positionAt(parseResult.diag_start(i)),
+              end: latestDoc.positionAt(parseResult.diag_end(i))
+            },
+            severity: parseResult.diag_severity(i) as DiagnosticSeverity,
+          });
+        }
       }
+
       connection.sendDiagnostics(
         { uri: latestDoc.uri, diagnostics }
       );
