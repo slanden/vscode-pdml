@@ -23,10 +23,6 @@
     "markup",
     "xml"
   ],
-  "activationEvents": [
-    "onLanguage:pdml",
-    "onLanguage:pml"
-  ],
   "main": "./dist/extension",
   "contributes": {
     "languages": [
