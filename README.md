@@ -9,6 +9,7 @@ This extension is still a work-in-progress, but includes the following features.
 - Syntax highlighting
 - Auto-indentation
 - Code Completion
+- Basic Linting
 
 ### PDML Extensions
 

@@ -176,6 +176,17 @@ E.g.
 export function pmlNodes() {
   return [
     {
+      label: 'options',
+      kind: CompletionItemKind.Constructor,
+      documentation: mDoc(`Options\n
+Used to define a set of options applied to the document. If used, this node must be the first child node of the \`doc\` node.
+
+Please consult the user manual and/or the CLI manual to see the list of options available.
+
+[PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
+        }/#node_options)`)
+    },
+    {
       label: 'doc',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Document\n
@@ -203,6 +214,15 @@ A chapter in the document.
         }/#node_ch)`)
     },
     {
+      label: 'title',
+      kind: CompletionItemKind.Constructor,
+      documentation: mDoc(`Chapter Title\n
+A title for a chapter. This must be the first child node of a chapter. The text of this node is used in the table of contents.
+
+[PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
+        }/#node_title)`)
+    },
+    {
       label: 'subtitle',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Chapter Subtitle\n
@@ -210,17 +230,6 @@ A subtitle for a chapter, displayed on a separate line after a chapter's title. 
 
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_ch)`)
-    },
-    {
-      label: 'options',
-      kind: CompletionItemKind.Constructor,
-      documentation: mDoc(`Options\n
-Used to define a set of options applied to the document. If used, this node must be the first child node of the \`doc\` node.
-
-Please consult the user manual and/or the CLI manual to see the list of options available.
-
-[PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
-        }/#node_options)`)
     },
     {
       label: 'list',
@@ -243,7 +252,7 @@ An element of a list.
         }/#node_el)`)
     },
     {
-      label: 'table_data',
+      label: 'sim_table',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Table Data\n
 Simple table data defined as plain text, and rendered as a table. Each line of text represents a row.
@@ -256,7 +265,7 @@ The content of each cell can only be plain text. If formatted text or complex ce
 
 Simple table:
 \`\`\`
-[table_data
+[sim_table
   ~~~
     cell 1.1, cell 1.2
     cell 2.1, cell 2.2
@@ -266,7 +275,7 @@ Simple table:
 
 Table with header, footer, and column alignments:
 \`\`\`
-[table_data (halign="C,L,R")
+[sim_table (halign="C,L,R")
     ~~~
     Position, Product, Price
     -
@@ -425,7 +434,7 @@ Note: Attribute 'html_alt' can be used to add an explicit 'alt' attribute in the
       label: 'audio',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Audio\n
-An audio stream, such as an .mp3 or .wav file.
+An audio stream.
 
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_audio)`)
@@ -434,7 +443,7 @@ An audio stream, such as an .mp3 or .wav file.
       label: 'video',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Video\n
-A video, such as an .mp4 or .webm file.
+A video.
 
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_video)`)
@@ -528,7 +537,7 @@ Any output created by a software application, such as a result written to the OS
       label: 'b',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Bold Text\n
-Bold the text inside this node.
+Bold text.
 
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_b)`)
@@ -537,7 +546,7 @@ Bold the text inside this node.
       label: 'i',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Italic Text\n
-Italicize the text inside this node.
+Italicized text.
 
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_i)`)
@@ -584,10 +593,6 @@ Source code embedded within text.
       documentation: mDoc(`URL Link\n
 A URL link to a resource, such as a website or a file to download.
 
-## Example
-
-\`[link url=https://www.pml-lang.dev/docs/articles/practical-document-markup-language/index.html text="this article"]\`
-
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_link)`)
     },
@@ -597,6 +602,8 @@ A URL link to a resource, such as a website or a file to download.
       documentation: mDoc(`Verbatim Text\n
 Raw text that is rendered as is, without any transformations.
 
+Note: The text still has to be escaped, according to the standard PML escaping rules.
+
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_verbatim)`)
     },
@@ -604,7 +611,7 @@ Raw text that is rendered as is, without any transformations.
       label: 'xref',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Cross Reference\n
-A reference (link) to another node in the same document.
+A cross reference to another node in the same document.
 
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_xref)`)
@@ -622,7 +629,7 @@ This inline node is typically used to render an HTML \`<span>\` element with a s
       label: 'nl',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`New Line\n
-An explicit line break inserted into the document.
+An explicit line break.
 
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_nl)`)
@@ -631,7 +638,7 @@ An explicit line break inserted into the document.
       label: 'sp',
       kind: CompletionItemKind.Constructor,
       documentation: mDoc(`Space Character\n
-An explicit space character inserted into the document. Consecutive whitespace is always converted into a single space, as in HTML. This node can be used to explicitly insert two or more spaces.
+An explicit space character. Consecutive whitespace is always converted into a single space, as in HTML. This node can be used to explicitly insert two or more spaces.
 
 [PML Reference](${PML_DOC_BASE_URL}${PML_REF_SUBDIR
         }/#node_sp)`)

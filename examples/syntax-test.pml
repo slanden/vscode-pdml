@@ -1,3 +1,7 @@
+[options]
+dadwa
+[doc]
+
 sas[root
   [subnode (no-val num=0 sq='1' dq="3\d2" uq=unq dec=-0.99 [- Comment in attrs -] 42 "standalone dquote" 'standalone squote' s=/a/b)]
   [subnode (
