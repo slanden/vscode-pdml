@@ -69,8 +69,30 @@
     "attribute": {
       "patterns": [
         {
-          "match": "(?<!=\\s*)[a-zA-Z_][a-zA-Z0-9_\\.-]*",
-          "name": "entity.other.attribute-name"
+          "match": "(?<!=\\s*)((?:[a-zA-Z_][a-zA-Z0-9_\\.-]*:)*)([a-zA-Z_][a-zA-Z0-9_\\.-]*)",
+          "captures": {
+            "1": {
+              "patterns": [
+                {
+                  "begin": "[a-zA-Z_][a-zA-Z0-9_\\.-]*",
+                  "end": ":",
+                  "beginCaptures": {
+                    "0": {
+                      "name": "entity.other.attribute-name"
+                    }
+                  },
+                  "endCaptures": {
+                    "0": {
+                      "name": "keyword.operator.namespace"
+                    }
+                  }
+                }
+              ]
+            },
+            "2": {
+              "name": "entity.other.attribute-name"
+            }
+          }
         },
         {
           "match": "=",
@@ -358,13 +380,31 @@
       ]
     },
     "node": {
-      "begin": "(\\[)([a-zA-Z_][a-zA-Z0-9_\\.-]*)",
+      "begin": "(\\[)((?:[a-zA-Z_][a-zA-Z0-9_\\.-]*:)*)([a-zA-Z_][a-zA-Z0-9_\\.-]*)",
       "end": "\\]",
       "beginCaptures": {
         "1": {
           "name": "punctuation.definition.tag"
         },
         "2": {
+          "patterns": [
+            {
+              "begin": "[a-zA-Z_][a-zA-Z0-9_\\.-]*",
+              "end": ":",
+              "beginCaptures": {
+                "0": {
+                  "name": "entity.name.namespace"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "keyword.operator.namespace"
+                }
+              }
+            }
+          ]
+        },
+        "3": {
           "name": "entity.name.tag"
         }
       },

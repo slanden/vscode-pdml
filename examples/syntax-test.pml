@@ -24,6 +24,9 @@ sas[root
   [subnode
     (attr=3)
   ]
+  [ns:item]
+  [ns:item:item:item (
+    name name:spaced:attr)]
   [title Example PDML File]
   [dashed-node]
   [tree

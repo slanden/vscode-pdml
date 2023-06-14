@@ -34,15 +34,15 @@
       "-]"
     ],
     {
-      "begin": "\"",
-      "end": "\"",
+      "open": "\"",
+      "close": "\"",
       "notIn": [
         "string"
       ]
     },
     {
-      "begin": "'",
-      "end": "'",
+      "open": "'",
+      "close": "'",
       "notIn": [
         "string"
       ]
