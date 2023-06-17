@@ -69,6 +69,10 @@
     [
       "'",
       "'"
+    ],
+    [
+      "`",
+      "`"
     ]
   ],
   // An empty array would disable them

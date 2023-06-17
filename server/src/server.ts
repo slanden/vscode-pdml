@@ -11,11 +11,7 @@ import { getLanguageModes, LanguageMode } from './Vocabularies'
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { DiagnosticSeverity, parse } from '../../parser/pdml';
 
-// Create a connection for the server, using Node's IPC
-// as a transport. Also include all preview/proposed
-// LSP features.
 const connection = createConnection(ProposedFeatures.all);
-// Create a simple text document manager
 const documents: TextDocuments<TextDocument> =
   new TextDocuments(TextDocument);
 let languageModes: Map<String, LanguageMode>;
@@ -36,7 +32,7 @@ connection.onInitialize((_params: InitializeParams) => {
       // Tell the client this server supports code completion
       completionProvider: {
         resolveProvider: false,
-        triggerCharacters: ['[']
+        triggerCharacters: ['[', ':']
       }
     }
   };
@@ -110,11 +106,10 @@ async function validateTextDocument(doc: TextDocument) {
   }
 }
 
-connection.onCompletion(async (docPosition) => {
+// Triggers on a "trigger" character, or when a match wasn't found
+connection.onCompletion((docPosition) => {
   const doc = documents.get(docPosition.textDocument.uri);
-  if (!doc) {
-    return null;
-  }
+  if (!doc) return null;
 
   return languageModes.get(doc.languageId)?.
     getCompletions?.(doc, docPosition.position) ??
@@ -123,5 +118,4 @@ connection.onCompletion(async (docPosition) => {
 
 // Listen for open, change, and close TextDocument events
 documents.listen(connection);
-// Listen on the connection
 connection.listen();

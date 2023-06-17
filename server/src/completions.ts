@@ -20,36 +20,35 @@ const PML_REF_SUBDIR = '/docs/reference_manual';
 export function pdmlNamespaces(pos: Position) {
   return [
     {
+      // `title` is required but empty because it's never shown
+      command: { command: CMD_TRIGGER_SUGGEST, title: '' },
       label: 's',
+      insertText: 's:',
       kind: CompletionItemKind.Module,
       documentation: mDoc(`PDML Extension: Script Nodes
 
 [PDML Reference](${PDML_DOC_BASE_URL
         }/docs/extensions/user_manual/#script_nodes)`),
-      textEdit: { newText: 's:', range: { start: pos, end: pos } },
-      // `title` is required but empty because it's never shown
-      command: { command: CMD_TRIGGER_SUGGEST, title: '' },
     },
     {
+      command: { command: CMD_TRIGGER_SUGGEST, title: '' },
+      insertText: 't:',
       label: 't',
       kind: CompletionItemKind.Module,
       documentation: mDoc(`PDML Extension: Type Nodes
 
 [PDML Reference](${PDML_DOC_BASE_URL
         }${PDML_DOC_EXT_REF_SUBDIR}/#types)`),
-      textEdit: { newText: 't:', range: { start: pos, end: pos } },
-      command: { command: CMD_TRIGGER_SUGGEST, title: '' }
     },
     {
+      command: { command: CMD_TRIGGER_SUGGEST, title: '' },
+      insertText: 'u:',
       label: 'u',
       kind: CompletionItemKind.Module,
       documentation: mDoc(`PDML Extension: Utility Nodes
 
 [PDML Reference](${PDML_DOC_BASE_URL
         }${PDML_DOC_EXT_REF_SUBDIR}/#utility_nodes)`),
-      textEdit: { newText: 'u:', range: { start: pos, end: pos } },
-      // `title` is required but empty because it's never shown
-      command: { command: CMD_TRIGGER_SUGGEST, title: '' },
     },
   ];
 }
