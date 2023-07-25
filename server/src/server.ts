@@ -2,74 +2,41 @@ import {
   CompletionList,
   createConnection,
   Diagnostic,
+  DiagnosticSeverity,
+  DidChangeConfigurationNotification,
   InitializeParams,
   ProposedFeatures,
   TextDocuments,
   TextDocumentSyncKind
 } from 'vscode-languageserver/node';
-import { getLanguageModes, LanguageMode } from './Vocabularies'
+import { getLanguageModes, LanguageMode } from './Vocabularies';
+import {
+  DIAGNOSTIC_CODE_TOGGLES,
+  lintEnabled,
+  settingNameToLintName,
+} from './lib';
 import { TextDocument } from 'vscode-languageserver-textdocument';
-import { DiagnosticSeverity, parse } from '../../parser/pdml';
+import { DiagnosticCode, parse } from '../../parser/pdml';
 
 const connection = createConnection(ProposedFeatures.all);
 const documents: TextDocuments<TextDocument> =
   new TextDocuments(TextDocument);
 let languageModes: Map<String, LanguageMode>;
 
-connection.onInitialize((_params: InitializeParams) => {
-  languageModes = getLanguageModes();
-
-  documents.onDidClose(e => {
-    // languageModes.onDocumentRemoved(e.document);
-  });
-  connection.onShutdown(() => {
-    // languageModes.dispose();
-  });
-
-  return {
-    capabilities: {
-      textDocumentSync: TextDocumentSyncKind.Full,
-      // Tell the client this server supports code completion
-      completionProvider: {
-        resolveProvider: false,
-        triggerCharacters: ['[', ':']
-      }
-    }
-  };
-});
-
-// connection.onDidChangeConfiguration(_change => {
-//   // Revalidate all open text documents
-//   documents.all().forEach(validateTextDocument);
-// });
-
-// The content of a text document changed. This event
-// is emitted when the text document first opened or
-// when its content has changed.
-documents.onDidChangeContent(change => {
-  validateTextDocument(change.document);
-});
-
+/** Parse and validate a text document */
 async function validateTextDocument(doc: TextDocument) {
   try {
     const diagnostics: Diagnostic[] = [];
     // const modes = languageModes.getAllModesInDocument(doc);
     const latestDoc = documents.get(doc.uri);
     if (latestDoc?.version === doc.version) {
-      // Check that no new version has come in after
-      // the async op
-      // modes.forEach(mode => {
-      //   if (mode.doValidation) {
-      //     mode.doValidation(latestDoc).forEach(d => {
-      //       diagnostics.push(d);
-      //     });
-      //   }
-      // });
       let parseResult = parse(new TextEncoder().encode(latestDoc.getText()));
 
       if (doc.languageId === 'pml') {
         let doc_index;
         for (let i = 0; i < parseResult.diag_len(); ++i) {
+          if (!lintEnabled(parseResult.diag_code(i))) continue;
+
           if (doc_index == undefined &&
             parseResult.node_name(parseResult.diag_node_index(i)) === 'doc') {
             doc_index = parseResult.diag_node_index(i);
@@ -86,6 +53,8 @@ async function validateTextDocument(doc: TextDocument) {
         }
       } else {
         for (let i = 0; i < parseResult.diag_len(); ++i) {
+          if (!lintEnabled(parseResult.diag_code(i))) continue;
+
           diagnostics.push({
             message: parseResult.diag_msg(i),
             range: {
@@ -106,7 +75,51 @@ async function validateTextDocument(doc: TextDocument) {
   }
 }
 
-// Triggers on a "trigger" character, or when a match wasn't found
+connection.onInitialize((_params: InitializeParams) => {
+  languageModes = getLanguageModes();
+
+  // documents.onDidClose(e => {});
+  // connection.onShutdown(() => {
+  //   // languageModes.dispose();
+  // });
+
+  return {
+    capabilities: {
+      textDocumentSync: TextDocumentSyncKind.Full,
+      // Tell the client this server supports code completion
+      completionProvider: {
+        resolveProvider: false,
+        triggerCharacters: ['[', ':']
+      }
+    }
+  };
+});
+
+connection.onInitialized(() => {
+  connection.client.register(
+    DidChangeConfigurationNotification.type,
+    { section: 'pdml.lints' }
+  );
+})
+
+// Also triggers when the document is opened
+connection.onDidChangeConfiguration(async (change) => {
+  // Override default settings
+  for (const setting in change.settings.pdml.lints) {
+    // @ts-ignore
+    DIAGNOSTIC_CODE_TOGGLES[DiagnosticCode[settingNameToLintName(setting)]]
+      = change.settings.pdml.lints[setting];
+  }
+  documents.all().forEach(validateTextDocument);
+});
+
+// Also triggers when the document is opened
+documents.onDidChangeContent(change => {
+  validateTextDocument(change.document);
+});
+
+// Triggers on a "trigger" character, or when a match
+// wasn't found
 connection.onCompletion((docPosition) => {
   const doc = documents.get(docPosition.textDocument.uri);
   if (!doc) return null;
