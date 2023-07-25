@@ -11,6 +11,8 @@ This extension is still a work-in-progress, but includes the following features.
 - Code Completion
 - Basic Linting
 
+> Pair this extension with [Expandra](https://marketplace.visualstudio.com/items?itemName=shelby-landen.expandra) to have *Emmet*-like dynamic snippets.
+
 ### PDML Extensions
 
 The following language extensions are also supported.
@@ -31,7 +33,7 @@ If you know how to fix this please let me know.
 
 ## Contributing
 
-File bugs, feature requests, or feedback at [Github Issues](https://github.com/slanden/vscode-pdml/issues)
+File bugs, feature requests, or feedback at [Github Issues](https://github.com/slanden/vscode-pdml/issues).
 
 PDML was created by [Christian Neumanns](https://github.com/pdml-lang) and is still being specified. If you like the language and care about its future, stop by the [PDML Github Discussion](https://github.com/pdml-lang/basic-specification/discussions) and say hello.
 

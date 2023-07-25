@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.9.0
+- Added configuration settings to disable lints
+- Added Auto-closing quotes
+- Fixed completions not triggerable after no matches were found
+- Fixed the namespace character not triggering namespaced PDML extension nodes
+- Fixed PDML extension nodes listed in completions when they shouldn't be
+
 ## 0.8.0
 - Added support for new attribute node syntax
 - Added support for additional top-level PML node, `options`
