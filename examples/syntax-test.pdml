@@ -1,12 +1,14 @@
 sas[root
   [subnode (no-val num=0 sq='1' dq="3\d2" uq=unq dec=-0.99 [- Comment in attrs -] 42 "standalone dquote" 'standalone squote' s=/a/b)]
-  [subnode (
+  [subnode ^(
     no-value
     number=0
     squote='1'
     dquote="3\d2"
     unquote=unq
     invalid==
+    namespaced:attr:a
+    😁=emoj
     decimal= -0.99
     [- Comment in attrs -]
 
@@ -20,8 +22,10 @@ sas[root
   [subnode
     (attr=3)
   ]
+  [a[b c]]
   [title Example PDML File]
   [dashed-node]
+  [😏:😁.-! moj]
   [tree
     [branch
       [u:set leaves=1]

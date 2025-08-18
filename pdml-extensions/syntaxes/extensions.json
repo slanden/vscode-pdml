@@ -1,0 +1,96 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "PDML Extensions",
+	"injectionSelector": "L:source.pdml meta.extension",
+	"patterns": [
+		{
+			"include": "#string-single"
+		},
+		{
+			"include": "#string-double"
+		},
+		{
+			"include": "#block-comment"
+		},
+		{
+			"include": "#line-comment"
+		},
+		{
+			"include": "#attribute-group"
+		}
+	],
+	"repository": {
+		"attribute": {
+			"patterns": [
+				{
+          "match": "(?<!=\\s*)((?:[^\\s:]+:)*)([^\\s=\\)\\]]+)",
+          "captures": {
+            "1": {
+              "patterns": [
+                {
+                  "begin": "[^\\s:]+",
+                  "end": ":",
+                  "beginCaptures": {
+                    "0": {
+                      "name": "entity.other.attribute-name"
+                    }
+                  },
+                  "endCaptures": {
+                    "0": {
+                      "name": "keyword.operator.namespace"
+                    }
+                  }
+                }
+              ]
+            },
+            "2": {
+              "name": "entity.other.attribute-name"
+            }
+          }
+        },
+				{
+          "match": "=",
+          "name": "punctuation.separator.key-value"
+        },
+				{
+          "match": "(?<==)\\s*[^\\s='\"\\)]+",
+          "name": "string.unquoted"
+        }
+			]
+		},
+		"attribute-group": {
+			"begin": "(?<=\\^)\\(",
+      "end": "\\)",
+			"captures": {
+        "0": {
+          "name": "punctuation.definition.annotation punctuation.section.group punctuation.section.parens"
+        }
+      },
+			"patterns": [
+				{
+          "include": "#attribute"
+        }
+			]
+		},
+		"string-single": {
+			"begin": "(?<=\\^)'",
+      "end": "'",
+      "name": "string.quoted.single"
+		},
+		"string-double": {
+			"begin": "(?<=\\^)\"",
+      "end": "\"",
+      "name": "string.quoted.double"
+		},
+		"block-comment": {
+			"begin": "(?<=\\^)\\/\\*",
+			"end": "\\*\\/",
+			"name": "comment.block"
+		},
+		"line-comment": {
+			"match": "(?<=\\^)\\/.*",
+			"name": "comment.line.double-slash"
+		}
+	},
+	"scopeName": "extensions"
+}

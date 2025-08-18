@@ -1,0 +1,120 @@
+{
+	"name": "pdml",
+	"displayName": "PDML",
+	"description": "Practical Data & Markup Language support",
+	"icon": "images/logo.png",
+	"publisher": "shelby-landen",
+	"version": "0.10.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/slanden/vscode-pdml.git/pdml"
+	},
+	"engines": {
+		"vscode": "^1.86.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"keywords": [
+		"pdml",
+		"pml",
+		"practical",
+		"data",
+		"markup",
+		"xml",
+		"extensible markup"
+	],
+	"main": "client/src/main.cjs",
+	"contributes": {
+		"commands": [
+			{
+				"command": "pdml.register",
+				"title": "PDML: Register Plugin"
+			}
+		],
+		"configuration": {
+			"title": "PDML",
+			"properties": {
+				"pdml.lints": {
+					"type": "object",
+					"properties": {
+						"unexpectedEquals": {
+							"title": "Unexpected Equal Sign",
+							"description": "Notify of an Equal sign, '=', in the wrong place",
+							"type": "boolean",
+							"default": true
+						},
+						"missingSeparator": {
+							"title": "Missing Node Separator",
+							"description": "Notify of a missing node separator",
+							"type": "boolean",
+							"default": false
+						},
+						"oneRoot": {
+							"title": "Only a Single Root Node",
+							"description": "Notify of content appearing before/after the first node at the same level",
+							"type": "boolean",
+							"default": false
+						}
+					}
+				},
+				"pdml.version": {
+					"type": "number",
+					"enum": [
+						1,
+						2
+					],
+					"default": 1,
+					"description": "Select which version of PDML to use"
+				}
+			}
+		},
+		"languages": [
+			{
+				"id": "pdml",
+				"aliases": [
+					"Practical Data & Markup Language",
+					"pdml"
+				],
+				"extensions": [
+					".pdml"
+				],
+				"configuration": "./language-configuration.json",
+				"icon": {
+					"dark": "images/file-icon.svg",
+					"light": "images/file-icon.svg"
+				}
+			}
+		],
+		"grammars": [
+			{
+				"language": "pdml",
+				"scopeName": "source.pdml",
+				"path": "./syntaxes/core.json",
+				"embeddedLanguages": {
+					"meta.embedded.block.css": "css",
+					"meta.embedded.block.javascript": "javascript"
+				},
+				"unbalancedBracketScopes": [
+					"constant.character.escape"
+				]
+			}
+		]
+	},
+	"devDependencies": {
+		"@bytecodealliance/jco": "^1.11.3",
+		"@types/node": "^20",
+		"rolldown": "^1.0.0-beta.31"
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"build-wasi": "node scripts/build.mjs",
+		"build-wasi-release": "node scripts/build.mjs --release",
+		"postinstall": "cd client && npm install && cd ../server && npm install",
+		"publish": "vsce publish",
+    "set-main-dev": "sed -i 's|\"main\": .*|\"main\": \"client/src/main.cjs\",|' package.json",
+    "set-main-prod": "sed -i 's|\"main\": .*|\"main\": \"dist/client.cjs\",|' package.json",
+    "build": "rm -rf dist/* && rolldown --config && cp server/src/main.cjs dist/server.cjs",
+		"test": "node --test --test-reporter dot"
+	}
+}

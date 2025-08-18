@@ -1,4 +1,6 @@
-node_modules
 dist
-*.map
-parser
+node_modules
+wasi-modules
+# A clone of a separate repo unpacked here for testing
+# within the same workspace
+pml

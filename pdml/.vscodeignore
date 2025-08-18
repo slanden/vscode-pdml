@@ -1,0 +1,8 @@
+**/node_modules
+client
+server
+scripts
+.vscode/**
+*.md
+  !readme.md
+rolldown.config.js

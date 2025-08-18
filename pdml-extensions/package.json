@@ -1,0 +1,56 @@
+{
+	"name": "pdml-extensions",
+  "displayName": "Official PDML Extensions",
+	"description": "Extensions from the PDML Extensions Specification",
+	"icon": "../extension-icon.png",
+	"publisher": "shelby-landen",
+	"version": "0.1.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/slanden/vscode-pdml.git/pdml-extensions"
+	},
+	"engines": {
+		"vscode": "^1.86.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"keywords": [
+    "pdml",
+		"pdml extension"
+	],
+	"main": "main.cjs",
+	"type": "commonjs",
+	"contributes": {
+		"grammars": [
+			{
+				"path": "syntaxes/extensions.json",
+				"scopeName": "extensions",
+				"injectTo": [
+					"source.pdml"
+				]
+			}
+		]
+	},
+	"activationEvents": [
+		"onLanguage:pdml"
+	],
+	"extensionDependencies": [
+		"shelby-landen.pdml"
+	],
+	"dependencies": {
+		"vscode-languageserver": "^9.0.1"
+	},
+	"devDependencies": {
+		"@bytecodealliance/jco": "^1.12.0",
+		"@types/vscode": "^1.75.1",
+		"rolldown": "^1.0.0-beta.31"
+	},
+	"scripts": {
+		"build": "rm -rf dist/* && rolldown --dir dist main.cjs --format cjs --entry-file-names main.cjs",
+		"build-wasi": "node scripts/build.mjs",
+		"build-wasi-release": "node scripts/build.mjs --release",
+    "set-main-dev": "sed -i 's|\"main\": .*|\"main\": \"main.cjs\",|' package.json",
+    "set-main-prod": "sed -i 's|\"main\": .*|\"main\": \"dist/main.cjs\",|' package.json"
+	}
+}

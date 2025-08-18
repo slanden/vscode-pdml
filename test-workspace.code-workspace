@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "path": "pdml"
+    },
+		{
+			"path": "pdml-extensions"
+		},
+    {
+      "path": "pml"
+    }
+  ]
+}

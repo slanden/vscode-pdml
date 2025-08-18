@@ -1,0 +1,108 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Practical Data & Markup Language",
+  "patterns": [
+    {
+      "include": "#node"
+    },
+    {
+      "include": "#escape-str"
+    },
+		{
+			"include": "#extension"
+		}
+  ],
+  "repository": {
+    "escape-str": {
+      "patterns": [
+        {
+          "match": "\\\\.",
+          "name": "constant.character.escape"
+        }
+      ]
+    },
+		"extension": {
+			"begin": "(\\^)",
+			"comment": "I don't know why this (mostly) works",
+			"end": "[^\\]]?",
+			"beginCaptures": {
+				"1": {
+					"name": "meta.extension keyword.operator.extension"
+				}
+			},
+			"contentName": "meta.extension"
+		},
+    "node": {
+      "begin": "(\\[)((?:[^\\s:]+:)*)([^\\s=\\)\\]]+)",
+      "end": "\\]",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag"
+        },
+        "2": {
+          "patterns": [
+            {
+              "begin": "[^\\s:]+",
+              "end": ":",
+              "beginCaptures": {
+                "0": {
+                  "name": "entity.name.namespace"
+                }
+              },
+              "endCaptures": {
+                "0": {
+                  "name": "keyword.operator.namespace"
+                }
+              }
+            }
+          ]
+        },
+        "3": {
+          "name": "entity.name.tag"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.tag"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#node"
+        },
+        {
+          "include": "#fenced-code"
+        },
+        {
+          "include": "#escape-str"
+        },
+				{
+					"include": "#extension"
+				}
+      ]
+    },
+    "number": {
+      "match": "-?[0-9]+(.[0-9]+)*",
+      "name": "constant.numeric"
+    },
+    "fenced-code": {
+      "begin": "((\"|=|~)\\2{2,})$",
+      "end": "\\1",
+      "captures": {
+        "0": {
+          "name": "string.quoted.triple"
+        }
+      },
+      "contentName": "meta.embedded.block",
+      "patterns": [
+        {
+          "include": "source.js"
+        },
+        {
+          "include": "source.css"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.pdml"
+}

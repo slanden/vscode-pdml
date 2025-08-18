@@ -1,49 +1,25 @@
-// A launch configuration that launches the extension inside a new window
-// Use IntelliSense to learn about possible attributes.
-// Hover to view descriptions of existing attributes.
-// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+// A launch configuration that compiles the extension and then opens it inside a new window
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Launch Client",
-      "type": "extensionHost",
-      "request": "launch",
-      "args": [
-        "--extensionDevelopmentPath=${workspaceRoot}"
-      ],
-      "outFiles": [
-        "${workspaceRoot}/dist/extension*"
-      ],
-      // Without this, Something keeps trying to look
-      // for map files in node_modules. This probably
-      // breaks debugging, but it shuts up so..
-      "resolveSourceMapLocations": [
-        "z"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to Server",
-      "port": 6009,
-      "restart": true,
-      "outFiles": [
-        "${workspaceRoot}/dist/server*"
-      ],
-      "resolveSourceMapLocations": [
-        "z"
-      ]
-    },
-  ],
-  "compounds": [
-    {
-      "name": "Client + Server",
-      "configurations": [
-        "Launch Client",
-        "Attach to Server"
-      ],
-      "preLaunchTask": "npm: esbuild-watch"
-    }
-  ]
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}",
+				"--disable-extensions"
+			],
+			"outFiles": [
+				"${workspaceRoot}/dist/**/*.js",
+			],
+      
+			"autoAttachChildProcesses": true,
+			// "preLaunchTask": {
+			// 	"type": "npm",
+			// 	"script": "watch"
+			// }
+		}
+	]
 }
