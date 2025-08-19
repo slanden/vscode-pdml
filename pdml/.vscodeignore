@@ -1,8 +1,11 @@
 **/node_modules
+**/*.*ts
+*.md
+  !readme.md
+  !changelog.md
+.vscode/**
 client
 server
 scripts
-.vscode/**
-*.md
-  !readme.md
+host.mjs
 rolldown.config.js

@@ -2,7 +2,7 @@
 
 The [Practical Data & Markup Language (PDML)](https://pdml-lang.dev) is a lean, but much more readable alternative to the XML family of languages.
 
-Supports PDML 1.0.1
+Supports PDML 2.0
 
 ## Features
 
@@ -20,18 +20,18 @@ This VS Code extension can be extended by other VS Code extensions that provide 
 
 A PDML extension provides syntax that follows a '^' character. A vocabulary defines a set of nodes and provides a code completions for them, and can also choose to associate them with a different file extension.
 
-The PDML Extensions VS Code extension implements extensions from the PDML Extensions specification.
+The [*PDML Extensions*](https://marketplace.visualstudio.com/items?itemName=shelby-landen.pdml-extensions) VS Code extension implements extensions from the [PDML Extensions specification](https://pdml-lang.dev/docs/extensions/user_manual/index.html).
 
-The [PML VS Code extension]() is an example of a vocabulary.
+The [*PDML Vocabulary: PML*](https://marketplace.visualstudio.com/items?itemName=shelby-landen.pdml-pml) VS Code extension is an example of a vocabulary.
 
 See [plugins.md](./plugins.md) for more information on how to extend this extension.
 
 ## Migrating from 0.9 to 0.10
-When the PDML v2 specification was published, the v1 specification was made unavailable. Although some of the changes were obvious, I don't remember everything from the v1 specification and cannot provide migration tooling or helpful hints in a way you could be confident in.
+When the PDML 2 specification was published, the 1.x specification was made unavailable. Although some of the changes were obvious, I don't remember everything from the 1.x specification and cannot provide migration tooling or helpful hints in a way you could be confident in.
 
-Extensions were moved to [PDML Extensions](). You can install that to use the PDML v2 equivalents.
+Extensions were moved to [*PDML Extensions*](https://marketplace.visualstudio.com/items?itemName=shelby-landen.pdml-extensions). You can install that to use the PDML 2 equivalents.
 
-If you were using PML, that was moved to [PML support]().
+If you were using PML, that was moved to [*PDML Vocabulary: PML*](https://marketplace.visualstudio.com/items?itemName=shelby-landen.pdml-pml).
 
 ## Known Issues
 

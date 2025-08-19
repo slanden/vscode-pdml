@@ -8,11 +8,11 @@ There are two ways a VS Code extension can extend PDML.
 Both require some common properties in your *package.json* file though.
 
 ```json
-"extensionDependencies": [
-  "shelby-landen.pdml"
-],
 "activationEvents": [
   "onLanguage:pdml"
+],
+"extensionDependencies": [
+  "shelby-landen.pdml"
 ]
 ```
 These are both needed because your extension will need to activate, and then register with the main extension.

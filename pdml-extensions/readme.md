@@ -4,7 +4,7 @@ Provides the following extensions from the [PDML Extensions specification](https
 - Comments
 - *Extension nodes
 
-*Extension nodes don't adhere to the PDML Extensions v2 specification (they don't start with a `^` character). At this time, I'm not sure if they should be treated like extensions or just like any other nodes.
+*Extension nodes don't adhere to the latest PDML Extensions specification (they don't start with a `^` character). At this time, I'm not sure if they should be treated like extensions or just like any other nodes.
 
 ## Contributing
 
