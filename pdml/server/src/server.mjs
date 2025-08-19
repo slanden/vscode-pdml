@@ -47,8 +47,8 @@ connection.onInitialize(async (params /* : InitializeParams */) => {
 		hasConfigurationCapability = !!capabilities.workspace.configuration;
 		hasWorkspaceFolderCapability = !!capabilities.workspace.workspaceFolders;
 	}
-	hasDiagnosticRelatedInformationCapability =
-		!!capabilities.textDocument?.publishDiagnostics?.relatedInformation;
+	// hasDiagnosticRelatedInformationCapability =
+	// 	!!capabilities.textDocument?.publishDiagnostics?.relatedInformation;
 
 	/**@type {import("vscode-languageserver").InitializeResult} */
 	const result /* : InitializeResult */ = {
