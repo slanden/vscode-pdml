@@ -28,11 +28,8 @@ module.exports = {
 					{
 						language: "pdml",
 						id: "pdml:extensions",
-						path: vscode.Uri.joinPath(
-							context.extensionUri,
-							"completions",
-							"pdml-extensions.mjs",
-						).fsPath,
+						path: vscode.Uri.joinPath(context.extensionUri, "completions.mjs")
+							.fsPath,
 					},
 				],
 			},

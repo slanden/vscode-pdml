@@ -1,4 +1,3 @@
-import { CompletionType, mDoc } from "./lib.mjs";
 import { CompletionItemKind } from "vscode-languageserver";
 
 const PDML_DOC_BASE_URL = "https://pdml-lang.dev";
@@ -177,4 +176,20 @@ E.g.
 [PDML Reference](${PDML_DOC_BASE_URL}${PDML_DOC_EXT_REF_SUBDIR}/#ins_file_node)`),
 		},
 	];
+}
+
+// TODO: Copied from pdml extension; publish a
+// 			 package extension devs can use instead
+/**@typedef {Symbol} CompletionType */
+const CompletionType = Object.freeze({
+	Empty: 1,
+	BeginNode: 2,
+	EndNamespace: 3,
+});
+
+function mDoc(markdownString) {
+	return {
+		kind: "markdown",
+		value: markdownString,
+	};
 }
