@@ -11,9 +11,10 @@ let client;
 
 /**@param {vscode.ExtensionContext} context */
 export async function activate(context) {
-	const serverModule = context.asAbsolutePath(
-		process.env.IS_PROD ? "server.cjs" : path.join("server", "src", "main.cjs"),
-	);
+	// Relative to the root, not the module
+	const serverModule = process.env.IS_PROD
+		? vscode.Uri.joinPath(context.extensionUri, "dist", "server.cjs").fsPath
+		: context.asAbsolutePath(path.join("server", "src", "main.cjs"));
 	const serverOptions = {
 		run: { module: serverModule, transport: TransportKind.ipc },
 		debug: {
@@ -37,7 +38,7 @@ export async function activate(context) {
 	}, 250);
 
 	// Allow time for other extensions to register
-	debouncedStartFn().then(() => debouncedRegisterFn());
+	debouncedStartFn().then(debouncedRegisterFn);
 	context.subscriptions.push(
 		vscode.commands.registerCommand(
 			"pdml.register",
@@ -84,10 +85,6 @@ export async function activate(context) {
 				debouncedRegisterFn();
 				const response = await req;
 				if (!response?.error) return;
-
-				vscode.window.showErrorMessage(
-					`Failed to register plugin: ${response.error}`,
-				);
 			},
 		),
 	);
@@ -100,7 +97,7 @@ export function deactivate() {
 async function startClientAndServer(serverOptions, clientOptions) {
 	const _client = new LanguageClient(
 		"pdml-lsp-client",
-		"PDML - New",
+		"PDML",
 		serverOptions,
 		clientOptions,
 	);

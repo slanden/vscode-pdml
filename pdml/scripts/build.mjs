@@ -29,7 +29,7 @@ const WASM_FILE_PATH = path.join(
 );
 
 child_process.execSync(
-	`jco transpile ${WASM_FILE_PATH} -o ${WASM_OUTPUT_DIR} --map '${WASI_PKG_NAME}/*=../host.mjs'`,
+	`jco transpile ${WASM_FILE_PATH} -o ${WASM_OUTPUT_DIR} --map '${WASI_PKG_NAME}/*=../host.mjs' --tla-compat`,
 );
 
 // The language server can't have `"type": "module"`, which

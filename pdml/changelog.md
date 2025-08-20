@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.10.1
+- Fixed incorrect rolldown config causing the client to point to a wrong file name
+- Fixed some dependency files not being included
+- Removed a top-level-await preventing a module from being bundled
+
 ## 0.10.0
 - Updated the supported PDML version to 2
 - PDML Extensions moved to another extension that depends on this one
