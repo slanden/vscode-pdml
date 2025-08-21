@@ -14,13 +14,12 @@ export default defineConfig([
 		},
 	},
 	{
-		input: "server/src/main.cjs",
+		input: "server/src/main.mjs",
 		output: {
 			dir: "dist",
-			entryFileNames: "server.cjs",
-			format: "cjs",
-			inlineDynamicImports: true,
+			entryFileNames: "server.mjs",
 		},
+		platform: "node",
 	},
 	// The JS file generated from JCO relies on this but the bundler
 	// doesn't include it, probably because of the syntax it used for

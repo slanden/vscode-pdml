@@ -4,7 +4,7 @@ import {
 	ProposedFeatures,
 	DidChangeConfigurationNotification,
 	TextDocumentSyncKind,
-} from "./vscode-languageserver.mjs";
+} from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
 	pluginIdentity,

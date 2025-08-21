@@ -13,8 +13,8 @@ let client;
 export async function activate(context) {
 	// Relative to the root, not the module
 	const serverModule = process.env.IS_PROD
-		? vscode.Uri.joinPath(context.extensionUri, "dist", "server.cjs").fsPath
-		: context.asAbsolutePath(path.join("server", "src", "main.cjs"));
+		? vscode.Uri.joinPath(context.extensionUri, "dist", "server.mjs").fsPath
+		: context.asAbsolutePath(path.join("server", "src", "main.mjs"));
 	const serverOptions = {
 		run: { module: serverModule, transport: TransportKind.ipc },
 		debug: {

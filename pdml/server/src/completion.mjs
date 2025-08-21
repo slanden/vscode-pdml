@@ -1,4 +1,4 @@
-import { Position, CompletionList } from "./vscode-languageserver.mjs";
+import { Position, CompletionList } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 
 /** The second item will be the node name if the
@@ -172,7 +172,6 @@ export function getCompletions(doc, pos) {
 			compls && completions.push(...compls);
 		}
 	}
-
 	return CompletionList.create(completions);
 }
 
