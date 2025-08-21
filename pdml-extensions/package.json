@@ -4,7 +4,7 @@
 	"description": "Extensions from the PDML Extensions specification",
 	"icon": "dist/extension-icon.png",
 	"publisher": "shelby-landen",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/slanden/vscode-pdml.git/pdml-extensions"
@@ -46,7 +46,7 @@
 		"vscode-languageserver": "^9.0.1"
 	},
 	"scripts": {
-		"build": "rm -rf dist/* && rolldown --config && cp ../extension-icon.png dist && cp wasi-modules/*.wasm dist",
+		"build": "rm -rf dist/* && rolldown --config && cp ../extension-icon.png dist && cp wasi-modules/*.wasm dist/plugins",
 		"build-wasi": "node scripts/build.mjs",
 		"build-wasi-release": "node scripts/build.mjs --release",
 		"set-main-dev": "sed -i 's|\"main\": .*|\"main\": \"main.cjs\",|' package.json",

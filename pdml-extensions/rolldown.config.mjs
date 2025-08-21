@@ -29,7 +29,7 @@ const items = [
 		input:
 			"node_modules/@bytecodealliance/preview2-shim/lib/io/worker-thread.js",
 		output: {
-			dir: "dist",
+			dir: "dist/plugins",
 			format: "cjs",
 		},
 	},
@@ -41,7 +41,7 @@ for (const entry of entries) {
 	items.push({
 		input: `wasi-modules/${entry}`,
 		output: {
-			dir: "dist",
+			dir: "dist/plugins",
 			entryFileNames: entry,
 		},
 		platform: "node",

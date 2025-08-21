@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.1.2
+- Fixed plugins path not pointing to the new directory
+
 ## 0.1.1
 - Fixed some dependency files not being included
 
