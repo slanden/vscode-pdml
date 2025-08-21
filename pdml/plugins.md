@@ -17,6 +17,44 @@ Both require some common properties in your *package.json* file though.
 ```
 These are both needed because your extension will need to activate, and then register with the main extension.
 
+## Conventions
+### Names
+This is just what I did, but in the spirit of consistency I'll outline a starting point below while remaining open to suggestion.
+
+**VS Code Extension Name**
+Use a "pdml-" prefix.
+
+E.g. The PML extension is called `pdml-pml`.
+
+**VS Code Extension Display Name**
+The extension just provides a vocabulary?
+  Prefix it with "PDML Vocabulary: " and then whatever the vocabulary is called.
+
+The extension just provides a PDML extension?
+  Prefix it with "PDML Extension: " and then whatever the PDML extension is called.
+
+It provides multiple vocabularies, or multiple extensions, or any number of both?
+  Go nuts.
+
+### VS Code Extension Logo
+Not everything needs a custom logo and branding. I threw together [this image](https://github.com/slanden/vscode-pdml/blob/main/extension-icon.png) for extensions to signal a relation to PDML, and that it's just an extension and not a whole separate ecosystem. I'm open to suggestions.
+
+### Package.json Keywords
+I don't know how much it helps, but I'm using these for extensions providing PDML extensions:
+
+```json
+"categories": [
+  "Programming Languages"
+],
+"keywords": [
+  "pdml",
+  "pdml extension",
+  "pdml plugin"
+]
+```
+
+For vocabularies, do whatever you think is best.
+
 ## Registering your plugin
 In your extension, you need to call the `pdml.register` command provided by the *PDML Support for VS Code* extension. The first argument is your extension identifier and version in the following format:
   
@@ -67,6 +105,8 @@ Both the namespace and name are required.
 
 `path` is a file path to a *.mjs* file that exports a `completions()` function, which should return a list of VS Code Completions.
 
+> Important: This path will be used at runtime, so if the file passes through a build tool make sure the path points to the final build artifact.
+
 `includes` is an optional list of other vocabulary `id`s to include in this vocabulary. The completions shown will be the combined set of completions expected for the `language`, as well as from `includes`.
 
 #### Vocabularies with their own file extension
@@ -106,6 +146,8 @@ An object in a `plugins` list looks like this:
   type: "js",
 }
 ```
+
+> Important: `path` will be used at runtime, so if the file passes through a build tool make sure the path points to the final build artifact.
 
 #### Plugin interface
 Your plugin should export a function with this signature
