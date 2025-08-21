@@ -11,10 +11,9 @@ module.exports = {
 				continue;
 
 			plugins.push({
-				path: vscode.Uri.joinPath(
-					context.extensionUri,
-					"wasi-modules",
-					entry[0],
+				path: (process.env.IS_PROD
+					? vscode.Uri.joinPath(context.extensionUri, "dist", entry[0])
+					: vscode.Uri.joinPath(context.extensionUri, "wasi-modules", entry[0])
 				).fsPath,
 				type: "wasip2",
 			});
@@ -28,8 +27,14 @@ module.exports = {
 					{
 						language: "pdml",
 						id: "pdml:extensions",
-						path: vscode.Uri.joinPath(context.extensionUri, "completions.mjs")
-							.fsPath,
+						path: (process.env.IS_PROD
+							? vscode.Uri.joinPath(
+									context.extensionUri,
+									"dist",
+									"completions.mjs",
+								)
+							: vscode.Uri.joinPath(context.extensionUri, "completions.mjs")
+						).fsPath,
 					},
 				],
 			},

@@ -1,4 +1,5 @@
 **/*.*ts
 node_modules
 scripts
-main.cjs
+wasi-modules
+*js
