@@ -7,6 +7,7 @@ import {
 } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
+	debounceAsync,
 	pluginIdentity,
 	registerPlugin,
 	validateTextDocument,
@@ -20,6 +21,7 @@ import {
 
 const connection = createConnection(ProposedFeatures.all);
 const documents = new TextDocuments(TextDocument);
+const debouncedValidateTextDocument = debounceAsync(validateTextDocument, 1000);
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 // let hasDiagnosticRelatedInformationCapability = false;
@@ -116,7 +118,7 @@ documents.onDidChangeContent(async (change) => {
 
 	connection.sendDiagnostics({
 		uri: change.document.uri,
-		diagnostics: await validateTextDocument(change.document),
+		diagnostics: await debouncedValidateTextDocument(change.document),
 	});
 });
 

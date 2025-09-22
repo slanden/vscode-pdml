@@ -23,6 +23,33 @@ export function buildOffsetMap(text) {
 	return map;
 }
 
+/** Returns a function that debounces an async function */
+export function debounceAsync(fn, wait) {
+	let timeout;
+	let pendingPromise;
+	let pendingResolve;
+
+	return function (...args) {
+		if (!pendingPromise) {
+			pendingPromise = new Promise((resolve) => {
+				pendingResolve = resolve;
+			});
+		}
+
+		clearTimeout(timeout);
+		timeout = setTimeout(async () => {
+			timeout = null;
+			try {
+				pendingResolve(await fn.apply(this, args));
+			} finally {
+				pendingPromise = null;
+				pendingResolve = null;
+			}
+		}, wait);
+		return pendingPromise;
+	};
+}
+
 /** Use the result of `buildOffsetMap` to convert `utf8Offset`
  * to a UTF-16 offset
  */
