@@ -101,6 +101,9 @@
 			}
 		]
 	},
+	"dependencies": {
+		"@bytecodealliance/jco-transpile": "^0.0.4"
+	},
 	"devDependencies": {
 		"@bytecodealliance/jco": "^1.11.3",
 		"@types/node": "^20",

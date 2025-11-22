@@ -1,6 +1,7 @@
 dist
 node_modules
 wasi-modules
+pdml/cache
 # A clone of a separate repo unpacked here for testing
 # within the same workspace
 pml

@@ -9,9 +9,6 @@ module.exports = {
 		);
 		const plugins = [];
 		for (const entry of entries) {
-			if (entry[1] !== vscode.FileType.File || !entry[0].endsWith(".mjs"))
-				continue;
-
 			plugins.push({
 				path: (process.env.IS_PROD
 					? vscode.Uri.joinPath(

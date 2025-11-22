@@ -3,7 +3,6 @@ import fs from "node:fs";
 import path from "node:path";
 const RUST_PROJECT_DIR = "/home/slanden/Projects/pdml-parser";
 const WASM_OUTPUT_DIR = path.join(import.meta.dirname, "..", "wasi-modules");
-const WASI_PKG_NAME = "pdml:plugin";
 
 if (fs.existsSync(WASM_OUTPUT_DIR)) {
 	try {
@@ -28,24 +27,15 @@ for (const name of plugins) {
 		},
 	);
 
-	child_process.execSync(
-		`jco transpile ${path.join(
+	fs.cp(
+		path.join(
 			RUST_PROJECT_DIR,
 			"target",
 			"wasm32-wasip2",
 			process.argv[2] ? "release" : "debug",
 			`pdml_${name}.wasm`,
-		)} -o ${WASM_OUTPUT_DIR} --map '${WASI_PKG_NAME}/*=../host.mjs'`,
-	);
-
-	// The language server can't have `"type": "module"`, which
-	// causes immediate crash
-	fs.renameSync(
-		`${WASM_OUTPUT_DIR}/pdml_${name}.js`,
-		`${WASM_OUTPUT_DIR}/pdml_${name}.mjs`,
-	);
-	fs.renameSync(
-		`${WASM_OUTPUT_DIR}/pdml_${name}.d.ts`,
-		`${WASM_OUTPUT_DIR}/pdml_${name}.d.mts`,
+		),
+		path.join(WASM_OUTPUT_DIR, `pdml_${name}.wasm`),
+		(e) => e && console.error(e),
 	);
 }

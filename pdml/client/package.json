@@ -4,13 +4,14 @@
 	},
 	"type": "commonjs",
 	"dependencies": {
+		"@bytecodealliance/jco-transpile": "^0.0.4",
 		"vscode-languageclient": "^9.0.1"
 	},
 	"devDependencies": {
 		"@types/node": "^20",
 		"@types/vscode": "^1.75.1"
 	},
-  "scripts": {
-    "test": "node --test --test-reporter dot"
-  }
+	"scripts": {
+		"test": "node --test --test-reporter dot"
+	}
 }

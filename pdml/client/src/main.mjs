@@ -1,6 +1,6 @@
 import * as path from "node:path";
 import vscode from "./vscode.cjs";
-import { debounceAsync as debounce, waitForAllToFinish } from "./lib.mjs";
+import { transpile } from "./transpile.mjs";
 
 // Commonjs module, so we have to import it and then
 // destructure the imports out of it
@@ -45,6 +45,7 @@ export async function activate(context) {
 			/** Register a plugin
 			 * @param {string} id The VS Code extension's identifier and version
 			 * @param {{
+			 *  noCache?: boolean,
 			 *  plugins?: [],
 			 *  vocabularies?: import("../../server/src/completion.mjs").Vocabulary[]
 			 * }} bundle
@@ -76,6 +77,38 @@ export async function activate(context) {
 						}
 					}
 					await debouncedStartFn();
+				}
+
+				if (bundle.plugins) {
+					const pluginDir = vscode.Uri.joinPath(
+						context.extensionUri,
+						"cache",
+						id,
+					);
+					const SkipCheck = bundle.noCache || !(await pathExists(pluginDir));
+
+					for (let i = 0; i < bundle.plugins.length; ++i) {
+						if (bundle.plugins[i].type !== "wasip2") continue;
+
+						const extensionStart = bundle.plugins[i].path.lastIndexOf(".");
+						const basename = bundle.plugins[i].path.substring(
+							bundle.plugins[i].path.lastIndexOf(
+								process.platform.startsWith("win") ? "\\" : "/",
+							) + 1,
+							extensionStart,
+						);
+						const transpiledPath = vscode.Uri.joinPath(
+							pluginDir,
+							`${basename}.mjs`,
+						);
+
+						if (SkipCheck || !(await pathExists(transpiledPath))) {
+							registrationRequests.push(
+								...(await transpile(bundle.plugins[i].path, pluginDir.fsPath)),
+							);
+						}
+						bundle.plugins[i].path = transpiledPath.fsPath;
+					}
 				}
 				const req = client.sendRequest("register", {
 					id,
@@ -114,4 +147,12 @@ async function startClientAndServer(serverOptions, clientOptions) {
 		});
 	});
 	return _client;
+}
+
+/**@returns {Promise<vscode.FileType>} */
+function pathExists(path) {
+	return vscode.workspace.fs
+		.stat(path)
+		.then((stat) => stat.type)
+		.catch(() => false);
 }
