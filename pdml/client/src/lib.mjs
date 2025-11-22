@@ -41,3 +41,27 @@ export async function waitForAllToFinish(pending) {
 		if (settledCount === length) break;
 	}
 }
+
+/**
+ * @param {import("../../server/src/completion.mjs").Vocabulary[]} vocabularies
+ * @param {import("vscode-languageclient").DocumentSelector} documentSelector
+ * @param {(vocabId: string)} onInclude */
+export function addVocabLangsToDocumentSelector(
+	vocabularies,
+	documentSelector,
+	onInclude = () => {},
+) {
+	for (const vocab of vocabularies) {
+		if (!documentSelector.some((x) => x.language === vocab.language)) {
+			documentSelector.push({
+				scheme: "file",
+				language: vocab.language,
+			});
+		}
+		if (vocab.includes) {
+			for (const vocabId of vocab.includes) {
+				onInclude(vocabId);
+			}
+		}
+	}
+}

@@ -1,5 +1,10 @@
 import * as path from "node:path";
 import vscode from "./vscode.cjs";
+import {
+	addVocabLangsToDocumentSelector,
+	debounceAsync as debounce,
+	waitForAllToFinish,
+} from "./lib.mjs";
 import { transpile } from "./transpile.mjs";
 
 // Commonjs module, so we have to import it and then
@@ -35,7 +40,7 @@ export async function activate(context) {
 	const debouncedRegisterFn = debounce(async () => {
 		await waitForAllToFinish(registrationRequests);
 		client.sendRequest("client-ready");
-	}, 250);
+	}, 500);
 
 	// Allow time for other extensions to register
 	debouncedStartFn().then(debouncedRegisterFn);
@@ -53,28 +58,18 @@ export async function activate(context) {
 			async function registerPlugin(id, bundle) {
 				if (!client) {
 					if (bundle.vocabularies) {
-						for (const vocab of bundle.vocabularies) {
-							if (
-								!clientOptions.documentSelector.some(
-									(x) => x.language === vocab.language,
-								)
-							) {
-								clientOptions.documentSelector.push({
-									scheme: "file",
-									language: vocab.language,
+						addVocabLangsToDocumentSelector(
+							bundle.vocabularies,
+							clientOptions.documentSelector,
+							(vocabId) => {
+								// Cause VS Code extensions for the included
+								// language to activate
+								vscode.workspace.openTextDocument({
+									content: "",
+									language: vocabId,
 								});
-							}
-							if (vocab.includes) {
-								for (const vocabId of vocab.includes) {
-									// Cause VS Code extensions for the included
-									// language to activate
-									vscode.workspace.openTextDocument({
-										content: "",
-										language: vocabId,
-									});
-								}
-							}
-						}
+							},
+						);
 					}
 					await debouncedStartFn();
 				}
