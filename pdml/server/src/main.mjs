@@ -29,6 +29,8 @@ let isClientReady = false;
 
 // Cache the settings of all open documents
 const documentSettings = new Map();
+// VS Code extensions that want to receive node tree updates
+const treeChangeSubscribers = [];
 
 // Triggers on a "trigger" character, or when a match
 // wasn't found
@@ -105,7 +107,7 @@ connection.onDidChangeConfiguration(async (change) => {
 	for (const d of documents.all()) {
 		connection.sendDiagnostics({
 			uri: d.uri,
-			diagnostics: await validateTextDocument(d),
+			diagnostics: await validateTextDocument(d, treeChangeSubscribers),
 		});
 	}
 });
@@ -118,7 +120,10 @@ documents.onDidChangeContent(async (change) => {
 
 	connection.sendDiagnostics({
 		uri: change.document.uri,
-		diagnostics: await debouncedValidateTextDocument(change.document),
+		diagnostics: await debouncedValidateTextDocument(
+			change.document,
+			treeChangeSubscribers,
+		),
 	});
 });
 
@@ -136,7 +141,7 @@ connection.onRequest("client-ready", async () => {
 	for (const d of documents.all()) {
 		connection.sendDiagnostics({
 			uri: d.uri,
-			diagnostics: await validateTextDocument(d),
+			diagnostics: await validateTextDocument(d, treeChangeSubscribers),
 		});
 	}
 });
@@ -164,8 +169,15 @@ connection.onRequest("register", async ({ id, bundle }) => {
 						"Expected a `path` to a JavaScript module with an .mjs extension",
 					);
 				}
-				vocab.completions = (await import(vocab.path)).completions;
+				const mod = await import(vocab.path);
+				vocab.completions = mod.completions;
 				registerVocabulary(vocab);
+				if (mod.onDocumentChanged) {
+					if (typeof mod.onDocumentChanged !== "function") {
+						throw new Error("`onDocumentChanged` must be a function");
+					}
+					treeChangeSubscribers.push(mod.onDocumentChanged);
+				}
 			}
 		}
 	} catch (err) {

@@ -123,8 +123,14 @@ export async function registerPlugin(path, type) {
  * @param {import("vscode").TextDocument} textDocument
  * @returns {Promise<import("vscode").Diagnostic[]>}
  */
-export async function validateTextDocument(textDocument) {
-	const result = pdml.run(new TextEncoder().encode(textDocument.getText()));
+export async function validateTextDocument(
+	textDocument,
+	changeSubscriberCallbacks = [],
+) {
+	const engine = new pdml.Engine();
+	engine.registerLayer(new TextEncoder().encode("attributes"), "key-value");
+
+	const result = engine.parse(new TextEncoder().encode(textDocument.getText()));
 	const encodingMap = buildOffsetMap(textDocument.getText());
 	const diags = [];
 	for (const note of result.notes) {
@@ -149,6 +155,21 @@ export async function validateTextDocument(textDocument) {
 			severity: note.severity,
 		});
 	}
+	const data = {
+		keyValueLayer(name) {
+			return engine.keyValueLayer(new TextEncoder().encode(name));
+		},
+		nodeKeyValueLayerEntries(node, layer) {
+			return engine.nodeKeyValueLayerEntries(node, layer);
+		},
+		nodeName(node) {
+			return engine.nodeName(node);
+		},
+	};
+	for (const fn of changeSubscriberCallbacks) {
+		fn(result.nodes, result.tree, data);
+	}
+
 	return diags;
 }
 
