@@ -2,6 +2,11 @@ import { pushPlugin } from "../../host.mjs";
 import { core as pdml } from "../../wasi-modules/pdml.mjs";
 import { DiagnosticCode, lintEnabled } from "./lint.mjs";
 
+export function initEngine() {
+	const engine = new pdml.Engine();
+	return engine;
+}
+
 /** For every character in `text`, store a mapping between
  * the current UTF-8 and UTF-16 offsets to allow conversions
  * later */
@@ -121,15 +126,16 @@ export async function registerPlugin(path, type) {
 
 /** Parse and validate a text document
  * @param {import("vscode").TextDocument} textDocument
+ * @param {pdml.Engine} engine
+ * @param {function[]} changeSubscriberCallbacks
  * @returns {Promise<import("vscode").Diagnostic[]>}
  */
 export async function validateTextDocument(
 	textDocument,
+	engine,
 	changeSubscriberCallbacks = [],
 ) {
-	const engine = new pdml.Engine();
-	engine.registerLayer(new TextEncoder().encode("attributes"), "key-value");
-
+	engine.clearParseState();
 	const result = engine.parse(new TextEncoder().encode(textDocument.getText()));
 	const encodingMap = buildOffsetMap(textDocument.getText());
 	const diags = [];

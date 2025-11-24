@@ -8,6 +8,7 @@ import {
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
 	debounceAsync,
+	initEngine,
 	pluginIdentity,
 	registerPlugin,
 	validateTextDocument,
@@ -26,6 +27,7 @@ let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 // let hasDiagnosticRelatedInformationCapability = false;
 let isClientReady = false;
+let engine;
 
 // Cache the settings of all open documents
 const documentSettings = new Map();
@@ -107,7 +109,7 @@ connection.onDidChangeConfiguration(async (change) => {
 	for (const d of documents.all()) {
 		connection.sendDiagnostics({
 			uri: d.uri,
-			diagnostics: await validateTextDocument(d, treeChangeSubscribers),
+			diagnostics: await validateTextDocument(d, engine, treeChangeSubscribers),
 		});
 	}
 });
@@ -122,6 +124,7 @@ documents.onDidChangeContent(async (change) => {
 		uri: change.document.uri,
 		diagnostics: await debouncedValidateTextDocument(
 			change.document,
+			engine,
 			treeChangeSubscribers,
 		),
 	});
@@ -136,12 +139,13 @@ documents.onDidClose((e) => {
 });
 
 connection.onRequest("client-ready", async () => {
+	engine = initEngine();
 	isClientReady = true;
 
 	for (const d of documents.all()) {
 		connection.sendDiagnostics({
 			uri: d.uri,
-			diagnostics: await validateTextDocument(d, treeChangeSubscribers),
+			diagnostics: await validateTextDocument(d, engine, treeChangeSubscribers),
 		});
 	}
 });
