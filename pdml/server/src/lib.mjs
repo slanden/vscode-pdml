@@ -4,6 +4,18 @@ import { DiagnosticCode, lintEnabled } from "./lint.mjs";
 
 export function initEngine() {
 	const engine = new pdml.Engine();
+	// TODO: Remove and use commented code once plugins are allowed to register layers
+	engine.registerLayer(new TextEncoder().encode("attributes"), "key-value");
+	// for (let i = 0, len = pluginsLen(); i < len; ++i) {
+	// 	const expectedLayers = expectedPluginLayers(i);
+	// 	for (let j = 0; j < expectedLayers.length; ++j) {
+	// 		console.log("Register layer: ", expectedLayers[j]);
+	// 		engine.registerLayer(
+	// 			new TextEncoder().encode(expectedLayers[j].name),
+	// 			expectedLayers[j].kind,
+	// 		);
+	// 	}
+	// }
 	return engine;
 }
 
@@ -119,6 +131,12 @@ export async function registerPlugin(path, type) {
 	} else {
 		throw new Error("`type` must be 'wasip2', 'js' or nothing");
 	}
+
+	// TODO: Remove once plugins are allowed to register layers
+	if (plugin.expectedLayers().some((x) => x.name !== "attributes")) {
+		throw new Error("Plugin expects a layer that isn't registered");
+	}
+
 	// TODO: Maybe also validate interface here
 
 	pushPlugin(plugin);

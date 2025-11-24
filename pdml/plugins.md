@@ -132,7 +132,7 @@ If you don't want to use the *.pdml* file extension for your vocabulary, you can
 ### Plugins
 You can extend PDML with additional syntax (what PDML calls "extensions", which I'm trying to separate from VS Code's concept of extensions). You do this by providing one or more "plugins", which are files executable by the JavaScript engine that provide the interface the core PDML engine expects.
 
-Plugins can be either a JavaScript file, or a WebAssembly Component transpiled to WebAssembly core modules that are called by a JavaScript file. In addition, every JavaScript file must be a *.mjs* file.
+Plugins can be either a JavaScript file, or a WebAssembly Component. In addition, every JavaScript file must be a *.mjs* file.
 
 An object in a `plugins` list looks like this:
 
@@ -150,30 +150,43 @@ An object in a `plugins` list looks like this:
 > Important: `path` will be used at runtime, so if the file passes through a build tool make sure the path points to the final build artifact.
 
 #### Plugin interface
-Your plugin should export a function with this signature
+Your plugin should export these functions:
 ```js
 /**
+ * Defines the layers the plugin depends on
+ * @returns {LayerDef[]}
+ */
+expectedLayers() {}
+
+/**
  * @param {Uint8Array} bytes the remaining bytes of the
- * source text starting at the next character after the '^'
- * that triggered this function call
- * @param {boolean} interupted whether or not the previous
- * call to this function had to exit to allow nested PDML
- * extensions to run. When `interupted` is true, it's as if
- * an inner PDML extension has finished and is giving back
- * control to the outer PDML extension.
+ * source text starting at the next character after the
+ * '^' that triggered this function call
+ * @param {Uint8Array} layers the IDs of layers your
+ * plugin depends on. These will be determined behind
+ * the scenes, but the order will be the same as the
+ * order of your `expectedLayers()`.
+ * @param {boolean} interupted whether or not the
+ * previous call to this function had to exit to allow
+ * nested PDML extensions to run. When `interupted` is
+ * true, it's as if an inner PDML extension has
+ * finished and is giving back control to the outer PDML
+ * extension.
  * @returns {{
-		nodes: {text: string, kind: number}[],
+		nodes: {text: string, kind: number, layer: number?}[],
 		notes: Diagnostic[],
 		bytesRead: number,
 		interupted: boolean,
 	}}
  */
-run(bytes, interupted) {}
+run(bytes, layers, interupted) {}
 ```
 
-Every plugin must return an object with these properties. `nodes` and `notes` may be empty. `bytesRead` is important and tells the core parser to continue where your plugin completed. You should set `bytesRead` to the index of the last byte that was a part of your plugin's content.
+The layers defined in `expectedLayers()` are restricted to the layers registered by the PDML VS Code extension. If any of the items returned don't match one of those, an error will be returned during plugin registration. This is a precaution, and the restriction may be lifted in a later version.
 
-A node in the `nodes` list will have a `kind` property, but it doesn't currently matter what the value is, as long as it's an unsigned integer.
+In the result from `run()`, `nodes` and `notes` may be empty. `bytesRead` is important and tells the core parser to continue where your plugin completed. You should set `bytesRead` to the index of the last byte that was a part of your plugin's content.
+
+A node in the `nodes` list will have a `kind` property that corresponds to `core-node-kind`.
 
 ##### UTF-8
 PDML must be valid UTF-8, but your plugin doesn't need to check because the core parser does this after your plugin returns.
