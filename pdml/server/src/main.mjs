@@ -22,7 +22,7 @@ import {
 
 const connection = createConnection(ProposedFeatures.all);
 const documents = new TextDocuments(TextDocument);
-const debouncedValidateTextDocument = debounceAsync(validateTextDocument, 1000);
+const debouncedValidateTextDocument = debounceAsync(validateTextDocument, 500);
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 // let hasDiagnosticRelatedInformationCapability = false;
