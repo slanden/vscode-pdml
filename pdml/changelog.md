@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.11.0
+- Changed plugins to pass WebAssembly Components instead of transpiled versions, as the transpilation now happens in this extension
+- Added layers, but currently restricted to a pre-registered "attributes" layer
+- Added an `onDocumentChanged` hook for plugins
+- Improved performance when making changes to large files
+- Added a supported plugin version check
+
 ## 0.10.1
 - Fixed incorrect rolldown config causing the client to point to a wrong file name
 - Fixed some dependency files not being included

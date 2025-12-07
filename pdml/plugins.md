@@ -182,6 +182,8 @@ expectedLayers() {}
 run(bytes, layers, interupted) {}
 ```
 
+> JavaScript plugins must export a `pluginInterface` variable specifying the plugin interface and, most importantly, the version it supports. The format of this string is specified in the WIT specification for package names.
+
 The layers defined in `expectedLayers()` are restricted to the layers registered by the PDML VS Code extension. If any of the items returned don't match one of those, an error will be returned during plugin registration. This is a precaution, and the restriction may be lifted in a later version.
 
 In the result from `run()`, `nodes` and `notes` may be empty. `bytesRead` is important and tells the core parser to continue where your plugin completed. You should set `bytesRead` to the index of the last byte that was a part of your plugin's content.
@@ -204,6 +206,9 @@ If your plugin allows other extensions to be nested within, you should halt pars
 
 ##### Diagnostics
 Any diagnostics your plugin generates should have ranges based on UTF-8 byte offsets. These ranges are converted to character offsets later.
+
+##### Versioning
+As the PDML VS Code extension is pre-1.0, it only loads plugins that use the latest version of the plugin interface, defined in the WIT file. If the plugin is a WASM Component, and doesn't specify the version, it will be considered incompatible. This is because the API is still being worked out.
 
 #### Highlighting
 You can support highlighting in your extensions with an injection grammar, e.g.

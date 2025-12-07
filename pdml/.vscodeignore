@@ -4,6 +4,7 @@
   !readme.md
   !changelog.md
 .vscode/**
+cache
 client
 server
 scripts
