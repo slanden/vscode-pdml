@@ -2,22 +2,7 @@ import { pushPlugin } from "../../host.mjs";
 import { core as pdml } from "../../wasi-modules/pdml.mjs";
 import { DiagnosticCode, lintEnabled } from "./lint.mjs";
 
-export function initEngine() {
-	const engine = new pdml.Engine();
-	// TODO: Remove and use commented code once plugins are allowed to register layers
-	engine.registerLayer(new TextEncoder().encode("attributes"), "key-value");
-	// for (let i = 0, len = pluginsLen(); i < len; ++i) {
-	// 	const expectedLayers = expectedPluginLayers(i);
-	// 	for (let j = 0; j < expectedLayers.length; ++j) {
-	// 		console.log("Register layer: ", expectedLayers[j]);
-	// 		engine.registerLayer(
-	// 			new TextEncoder().encode(expectedLayers[j].name),
-	// 			expectedLayers[j].kind,
-	// 		);
-	// 	}
-	// }
-	return engine;
-}
+// TODO: Use `TextEncoder.encodeInto()` instead of `encode`
 
 /** For every character in `text`, store a mapping between
  * the current UTF-8 and UTF-16 offsets to allow conversions
@@ -67,22 +52,31 @@ export function debounceAsync(fn, wait) {
 	};
 }
 
-/** Use the result of `buildOffsetMap` to convert `utf8Offset`
- * to a UTF-16 offset
- */
-export function utf16Offset(map, utf8Offset) {
-	for (let i = 1; i < map.length; i++) {
-		if (map[i].utf8 >= utf8Offset) {
-			return (
-				map[i - 1].utf16 +
-				Math.floor(
-					((utf8Offset - map[i - 1].utf8) * (map[i].utf16 - map[i - 1].utf16)) /
-						(map[i].utf8 - map[i - 1].utf8),
-				)
-			);
-		}
-	}
-	return map[map.length - 1].utf16;
+export function initEngine() {
+	const engine = new pdml.Engine();
+	// TODO: Remove and use commented code once plugins are allowed to register layers
+	engine.registerLayer(new TextEncoder().encode("attributes"), "key-value");
+	// for (let i = 0, len = pluginsLen(); i < len; ++i) {
+	// 	const expectedLayers = expectedPluginLayers(i);
+	// 	for (let j = 0; j < expectedLayers.length; ++j) {
+	// 		console.log("Register layer: ", expectedLayers[j]);
+	// 		engine.registerLayer(
+	// 			new TextEncoder().encode(expectedLayers[j].name),
+	// 			expectedLayers[j].kind,
+	// 		);
+	// 	}
+	// }
+	return engine;
+}
+
+function isOldExtensionNode(text, offset, diagnosticRange) {
+	return (
+		text.charAt(offset) === ":" &&
+		diagnosticRange[1] === diagnosticRange[0] + 1 &&
+		(text.charAt(offset - 1) === "t" ||
+			text.charAt(offset - 1) === "u" ||
+			text.charAt(offset - 1) === "s")
+	);
 }
 
 // export const IdentityError = {
@@ -119,40 +113,84 @@ export async function registerPlugin(identity, path, type) {
 	let plugin;
 	if (!path.endsWith(".mjs")) {
 		throw new Error(
-			`The '${identity}' plugin has an invalid \`path\`. It must be a JavaScript module with a .mjs extension`,
+			`The '${identity[0]}' plugin has an invalid \`path\`. It must be a JavaScript module with a .mjs extension`,
 		);
 	}
 
 	if (type === "wasip2") {
 		const mod = await import(path);
 		plugin = mod.plugin;
+
+		for (const key in mod) {
+			// Should only be two keys: "plugin" and the fully
+			// qualified interface name. Skip "plugin".
+			// Checks length because the key will always be
+			// "plugin" and the other key will always be longer
+			if (key.length === 6) continue;
+
+			if (!supportedVersion(key)) {
+				throw new Error(
+					`The plugin '${identity[0]}' is incompatible with this version of PDML.`,
+				);
+			}
+		}
 	} else if (!type || type === "js") {
 		plugin = await import(path);
+		if (!plugin.pluginInterface) {
+			throw new Error(
+				`The plugin '${identity[0]}' is missing a \`pluginInterface\` property`,
+			);
+		}
+		if (!supportedVersion(plugin.pluginInterface)) {
+			throw new Error(
+				`The plugin '${identity[0]}' is incompatible with this version of PDML.`,
+			);
+		}
 	} else {
 		throw new Error(
-			`The '${identity}' plugin has an invalid \`type\`. It must be 'wasip2', 'js' or nothing`,
+			`The '${identity[0]}' plugin has an invalid \`type\`. It must be 'wasip2', 'js' or nothing`,
 		);
 	}
 
 	// TODO: Remove once plugins are allowed to register layers
 	if (plugin.expectedLayers().some((x) => x.name !== "attributes")) {
 		throw new Error(
-			`The plugin '${identity}' expects a layer that isn't registered`,
-		);
-	}
-	if (!validPluginInterface(plugin)) {
-		throw new Error(
-			`The plugin '${identity}' is incompatible with this version of PDML.`,
+			`The plugin '${identity[0]}' expects a layer that isn't registered`,
 		);
 	}
 	pushPlugin(plugin);
 }
 
-export function validPluginInterface(plugin) {
-	if (plugin.expectedLayers?.length === 0 && plugin.run?.length === 3) {
-		return true;
+function supportedVersion(interfaceName) {
+	const versionStart = interfaceName.indexOf("@");
+	if (
+		// Version not specified
+		versionStart === -1 ||
+		// 0.2
+		interfaceName.charAt(versionStart + 1) !== "0" ||
+		interfaceName.charAt(versionStart + 3) !== "2"
+	) {
+		return false;
 	}
-	return false;
+	return true;
+}
+
+/** Use the result of `buildOffsetMap` to convert `utf8Offset`
+ * to a UTF-16 offset
+ */
+export function utf16Offset(map, utf8Offset) {
+	for (let i = 1; i < map.length; i++) {
+		if (map[i].utf8 >= utf8Offset) {
+			return (
+				map[i - 1].utf16 +
+				Math.floor(
+					((utf8Offset - map[i - 1].utf8) * (map[i].utf16 - map[i - 1].utf16)) /
+						(map[i].utf8 - map[i - 1].utf8),
+				)
+			);
+		}
+	}
+	return map[map.length - 1].utf16;
 }
 
 /** Parse and validate a text document
@@ -208,14 +246,4 @@ export async function validateTextDocument(
 	}
 
 	return diags;
-}
-
-function isOldExtensionNode(text, offset, diagnosticRange) {
-	return (
-		text.charAt(offset) === ":" &&
-		diagnosticRange[1] === diagnosticRange[0] + 1 &&
-		(text.charAt(offset - 1) === "t" ||
-			text.charAt(offset - 1) === "u" ||
-			text.charAt(offset - 1) === "s")
-	);
 }

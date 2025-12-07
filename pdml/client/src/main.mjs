@@ -75,12 +75,18 @@ export async function activate(context) {
 				}
 
 				if (bundle.plugins) {
-					const pluginDir = vscode.Uri.joinPath(
-						context.extensionUri,
-						"cache",
-						id,
-					);
-					const SkipCheck = bundle.noCache || !(await pathExists(pluginDir));
+					const cacheDir = vscode.Uri.joinPath(context.extensionUri, "cache");
+					const pluginDir = vscode.Uri.joinPath(cacheDir, id);
+					const needsTranspile =
+						bundle.noCache || !(await pathExists(pluginDir));
+
+					if (needsTranspile) {
+						if (await pathExists(cacheDir)) {
+							await deleteOlderVersions(cacheDir, id);
+						} else {
+							await vscode.workspace.fs.createDirectory(cacheDir);
+						}
+					}
 
 					for (let i = 0; i < bundle.plugins.length; ++i) {
 						if (bundle.plugins[i].type !== "wasip2") continue;
@@ -97,7 +103,7 @@ export async function activate(context) {
 							`${basename}.mjs`,
 						);
 
-						if (SkipCheck || !(await pathExists(transpiledPath))) {
+						if (needsTranspile || !(await pathExists(transpiledPath))) {
 							registrationRequests.push(
 								...(await transpile(bundle.plugins[i].path, pluginDir.fsPath)),
 							);
@@ -151,4 +157,28 @@ function pathExists(path) {
 		.stat(path)
 		.then((stat) => stat.type)
 		.catch(() => false);
+}
+
+async function deleteOlderVersions(dir, basename) {
+	const entries = await vscode.workspace.fs.readDirectory(dir);
+	const basenameVersionStart = basename.lastIndexOf("@");
+	const _basename =
+		basenameVersionStart === -1
+			? basename
+			: basename.substring(0, basenameVersionStart);
+
+	let versionStart;
+	for (const entry of entries) {
+		versionStart = entry[0].lastIndexOf("@");
+		if (
+			(versionStart === -1 ? entry[0] : entry[0].substring(0, versionStart)) ===
+			_basename
+		) {
+			vscode.workspace.fs.delete(vscode.Uri.joinPath(dir, entry[0]), {
+				recursive: true,
+			});
+			// Only expects to find one version cached
+			return;
+		}
+	}
 }
