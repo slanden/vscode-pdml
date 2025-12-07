@@ -113,6 +113,7 @@ export async function activate(context) {
 				debouncedRegisterFn();
 				const response = await req;
 				if (!response?.error) return;
+				throw new Error(response.error);
 			},
 		),
 	);

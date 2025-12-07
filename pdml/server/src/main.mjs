@@ -163,7 +163,7 @@ connection.onRequest("register", async ({ id, bundle }) => {
 
 		if (bundle.plugins) {
 			for (const p of bundle.plugins) {
-				await registerPlugin(p.path, p.type);
+				await registerPlugin(identity, p.path, p.type);
 			}
 		}
 		if (bundle.vocabularies) {

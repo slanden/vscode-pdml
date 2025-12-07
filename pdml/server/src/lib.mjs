@@ -115,11 +115,11 @@ export function pluginIdentity(id) {
  * bundled with the extension
  * @param {'js|wasip2'} type The type of plugin that `path`
  * either is (if 'js') or loads (if 'wasip2') */
-export async function registerPlugin(path, type) {
+export async function registerPlugin(identity, path, type) {
 	let plugin;
 	if (!path.endsWith(".mjs")) {
 		throw new Error(
-			"`path` is expected to be a JavaScript module with a .mjs extension",
+			`The '${identity}' plugin has an invalid \`path\`. It must be a JavaScript module with a .mjs extension`,
 		);
 	}
 
@@ -129,17 +129,30 @@ export async function registerPlugin(path, type) {
 	} else if (!type || type === "js") {
 		plugin = await import(path);
 	} else {
-		throw new Error("`type` must be 'wasip2', 'js' or nothing");
+		throw new Error(
+			`The '${identity}' plugin has an invalid \`type\`. It must be 'wasip2', 'js' or nothing`,
+		);
 	}
 
 	// TODO: Remove once plugins are allowed to register layers
 	if (plugin.expectedLayers().some((x) => x.name !== "attributes")) {
-		throw new Error("Plugin expects a layer that isn't registered");
+		throw new Error(
+			`The plugin '${identity}' expects a layer that isn't registered`,
+		);
 	}
-
-	// TODO: Maybe also validate interface here
-
+	if (!validPluginInterface(plugin)) {
+		throw new Error(
+			`The plugin '${identity}' is incompatible with this version of PDML.`,
+		);
+	}
 	pushPlugin(plugin);
+}
+
+export function validPluginInterface(plugin) {
+	if (plugin.expectedLayers?.length === 0 && plugin.run?.length === 3) {
+		return true;
+	}
+	return false;
 }
 
 /** Parse and validate a text document
