@@ -10,4 +10,4 @@ server
 scripts
 wasi-modules
 host.mjs
-rolldown.config.js
+rolldown.config.mjs

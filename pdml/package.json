@@ -4,7 +4,7 @@
 	"description": "Practical Data & Markup Language support",
 	"icon": "images/logo.png",
 	"publisher": "shelby-landen",
-	"version": "0.11.0",
+	"version": "0.11.1",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/slanden/vscode-pdml.git/pdml"
@@ -104,7 +104,7 @@
 	"devDependencies": {
 		"@bytecodealliance/jco": "^1.11.3",
 		"@types/node": "^20",
-		"rolldown": "^1.0.0-beta.31"
+		"rolldown": "1.0.0-beta.53"
 	},
 	"scripts": {
 		"build": "rm -rf dist/* && rolldown --config && cp wasi-modules/*.wasm dist && node scripts/build.mjs",

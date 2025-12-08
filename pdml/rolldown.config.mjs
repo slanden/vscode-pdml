@@ -10,8 +10,10 @@ export default defineConfig([
 			inlineDynamicImports: true,
 			minify: true,
 		},
-		define: {
-			"process.env.IS_PROD": "true",
+		transform: {
+			define: {
+				"process.env.IS_PROD": "true",
+			},
 		},
 		external: "vscode",
 	},

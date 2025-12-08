@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.11.1
+- Fixed *rolldown* breakage preventing the server entrypoint from loading in prod
+
 ## 0.11.0
 - Changed plugins to pass WebAssembly Components instead of transpiled versions, as the transpilation now happens in this extension
 - Added layers, but currently restricted to a pre-registered "attributes" layer

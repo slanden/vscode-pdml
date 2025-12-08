@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.2.1
+- Fixed *rolldown* breakage preventing the entrypoint from loading in prod
+
+## 0.2.0
+- Upgraded the plugin interface
+
 ## 0.1.2
 - Fixed plugins path not pointing to the new directory
 
