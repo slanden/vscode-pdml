@@ -101,18 +101,15 @@
 			}
 		]
 	},
-	"dependencies": {
-		"@bytecodealliance/jco-transpile": "^0.0.4"
-	},
 	"devDependencies": {
 		"@bytecodealliance/jco": "^1.11.3",
 		"@types/node": "^20",
 		"rolldown": "^1.0.0-beta.31"
 	},
 	"scripts": {
-		"build": "rm -rf dist/* && rolldown --config && cp wasi-modules/*.wasm dist",
-		"build-wasi": "node scripts/build.mjs",
-		"build-wasi-release": "node scripts/build.mjs --release",
+		"build": "rm -rf dist/* && rolldown --config && cp wasi-modules/*.wasm dist && node scripts/build.mjs",
+		"build-wasi": "node scripts/build-wasi.mjs",
+		"build-wasi-release": "node scripts/build-wasi.mjs --release",
 		"postinstall": "cd client && npm install && cd ../server && npm install",
 		"set-main-dev": "sed -i 's|\"main\": .*|\"main\": \"client/src/main.cjs\",|' package.json",
 		"set-main-prod": "sed -i 's|\"main\": .*|\"main\": \"dist/client.cjs\",|' package.json",
