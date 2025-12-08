@@ -8,16 +8,19 @@ export default defineConfig([
 			entryFileNames: "client.cjs",
 			format: "cjs",
 			inlineDynamicImports: true,
+			minify: true,
 		},
 		define: {
 			"process.env.IS_PROD": "true",
 		},
+		external: "vscode",
 	},
 	{
 		input: "server/src/main.mjs",
 		output: {
 			dir: "dist",
 			entryFileNames: "server.mjs",
+			minify: true,
 		},
 		platform: "node",
 	},
@@ -31,6 +34,7 @@ export default defineConfig([
 		output: {
 			dir: "dist",
 			format: "cjs",
+			minify: true,
 		},
 	},
 ]);
