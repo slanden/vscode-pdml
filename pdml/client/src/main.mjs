@@ -1,4 +1,3 @@
-import * as path from "node:path";
 import vscode from "./vscode.cjs";
 import {
 	addVocabLangsToDocumentSelector,
@@ -19,7 +18,8 @@ export async function activate(context) {
 	// Relative to the root, not the module
 	const serverModule = process.env.IS_PROD
 		? vscode.Uri.joinPath(context.extensionUri, "dist", "server.mjs").fsPath
-		: context.asAbsolutePath(path.join("server", "src", "main.mjs"));
+		: vscode.Uri.joinPath(context.extensionUri, "server", "src", "main.mjs")
+				.fsPath;
 	const serverOptions = {
 		run: { module: serverModule, transport: TransportKind.ipc },
 		debug: {
