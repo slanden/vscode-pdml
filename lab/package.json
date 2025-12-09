@@ -1,0 +1,59 @@
+{
+  "name": "pdml-lab",
+  "displayName": "PDML Lab",
+  "description": "An unstable playground for potential proposals to the PDML specification",
+  "icon": "dist/extension-icon.png",
+  "publisher": "shelby-landen",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slanden/vscode-pdml.git/lab"
+  },
+  "engines": {
+    "vscode": "^1.86.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "pdml",
+    "pdml extension",
+    "pdml plugin"
+  ],
+  "main": "main.cjs",
+  "type": "commonjs",
+  "contributes": {
+    "grammars": [
+      {
+        "path": "syntaxes/extensions.json",
+        "scopeName": "lab",
+        "injectTo": [
+          "source.pdml"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.javascript": "javascript",
+          "meta.embedded.rust": "rust",
+          "meta.embedded.css": "css"
+        }
+      }
+    ]
+  },
+  "activationEvents": [
+    "onLanguage:pdml"
+  ],
+  "extensionDependencies": [
+    "shelby-landen.pdml"
+  ],
+  "devDependencies": {
+    "@types/vscode": "^1.75.1",
+    "rolldown": "1.0.0-beta.53"
+  },
+  "scripts": {
+    "build": "rm -rf dist/* && rolldown --config && cp ../extension-icon.png dist && cp wasi-modules/*.wasm dist/plugins",
+    "build-wasi": "node scripts/build.mjs",
+    "build-wasi-release": "node scripts/build.mjs --release",
+    "set-main-dev": "sed -i 's|\"main\": .*|\"main\": \"main.cjs\",|' package.json",
+    "set-main-prod": "sed -i 's|\"main\": .*|\"main\": \"dist/main.cjs\",|' package.json",
+    "vscode:prepublish": "npm run build-wasi-release && npm run build"
+  }
+}

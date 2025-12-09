@@ -1,0 +1,130 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "PDML Lab",
+	"injectionSelector": "L:source.pdml meta.extension",
+	"patterns": [
+		{
+			"include": "#raw-text-via-less-dupe-more-processing"
+		}
+	],
+	"repository": {
+		"raw-text-via-duplication": {
+      "patterns": [
+        {
+          "begin": "(?<=\\^)`(js)`",
+          "comment": "Without using `meta.embedded.{block,inline}...`, it must be mapped in package.json `embeddedLanguages`",
+          "contentName": "meta.embedded.javascript",
+          "patterns": [{"include": "source.js"}],
+          "beginCaptures": {
+            "0": {
+              "name": "markup.raw punctuation.definition"
+            },
+            "1": {
+              "name":"string.interpolated"
+            }
+          },
+          "end": "``",
+          "endCaptures": {
+            "0": {
+              "name": "markup.raw punctuation.definition"
+            }
+          }
+        },
+        {
+          "begin": "(?<=\\^)`(css)`",
+          "contentName": "meta.embedded.css",
+          "patterns": [{"include": "source.css"}],
+          "beginCaptures": {
+            "0": {
+              "name": "markup.raw punctuation.definition"
+            },
+            "1": {
+              "name":"string.interpolated"
+            }
+          },
+          "end": "``",
+          "endCaptures": {
+            "0": {
+              "name": "markup.raw punctuation.definition"
+            }
+          }
+        },
+        {
+          "begin": "(?<=\\^)`(rust)`",
+          "contentName": "meta.embedded.rust",
+          "patterns": [{"include": "source.rust"}],
+          "beginCaptures": {
+            "0": {
+              "name": "markup.raw punctuation.definition"
+            },
+            "1": {
+              "name":"string.interpolated"
+            }
+          },
+          "end": "``",
+          "endCaptures": {
+            "0": {
+              "name": "markup.raw punctuation.definition"
+            }
+          }
+        },
+        {
+          "begin": "(?<=\\^)`([a-z]*)`",
+          "beginCaptures": {
+            "0": {
+              "name": "markup.raw punctuation.definition"
+            },
+            "1": {
+              "name":"string.interpolated"
+            }
+          },
+          "end": "``",
+          "endCaptures": {
+            "0": {
+              "name": "markup.raw punctuation.definition"
+            }
+          },
+          "contentName": "meta.embedded"
+        }
+      ]
+    },
+    "raw-text-via-less-dupe-more-processing": {
+      "begin": "(?<=\\^)`([a-z]*)`",
+      "beginCaptures": {
+        "0": {
+          "name": "markup.raw punctuation.definition"
+        },
+        "1": {
+          "name":"string.interpolated"
+        }
+      },
+      "end": "``",
+      "endCaptures": {
+        "0": {
+          "name": "markup.raw punctuation.definition"
+        }
+      },
+      "patterns": [
+        {
+          "begin": "(?<=`css`)",
+          "while": "(?=)",
+          "name": "meta.embedded.css",
+          "patterns": [{ "include": "source.css" }]
+        },
+        {
+          "begin": "(?<=`js`)",
+          "while": "^(?!``)",
+          "name": "meta.embedded.javascript",
+          "patterns": [{ "include": "source.js" }]
+        },
+        {
+          "begin": "(?<=`rust`)",
+          "while": "^(?!``)",
+          "name": "meta.embedded.rust",
+          "patterns": [{ "include": "source.rust" }]
+        }
+      ]
+    }
+	},
+	"scopeName": "lab"
+}
