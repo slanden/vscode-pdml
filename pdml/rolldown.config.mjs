@@ -15,7 +15,7 @@ export default defineConfig([
 				"process.env.IS_PROD": "true",
 			},
 		},
-		external: "vscode",
+		external: ["vscode", "@bytecodealliance/preview2-shim"],
 	},
 	{
 		input: "server/src/main.mjs",

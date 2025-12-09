@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.11.2
+- Fixed *@bytecodealliance/preview-shim2* not being included
+
 ## 0.11.1
 - Fixed *rolldown* breakage preventing the server entrypoint from loading in prod
 
